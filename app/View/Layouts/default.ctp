@@ -39,7 +39,7 @@ $cakeDescription = __d('cake_dev', 'Twenty Words');
 <body>
 	<div id="container">
 		<div id="header">
-			<h1>Twenty Words</h1>
+			<h1>Twenty Words Proto</h1>
 		</div>
 		<div id="content">
 
