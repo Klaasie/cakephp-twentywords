@@ -32,6 +32,17 @@
 	Router::connect('/pages/*', array('controller' => 'pages', 'action' => 'display'));
 
 /**
+ * Routing the rest of the app.
+ */
+	Router::connect('/dashboard', array('controller' => 'courses', 'action' => 'dashboard'));
+	Router::connect('/profile/', array('controller' => 'users', 'action' => 'profile'));
+	Router::connect(
+		'/profile/:username',
+		array('controller' => 'users', 'action' => 'profile'),
+		array('pass' => array('username'))
+	);
+
+/**
  * Load all plugin routes.  See the CakePlugin documentation on
  * how to customize the loading of plugin routes.
  */

@@ -59,7 +59,7 @@
  */
 class DATABASE_CONFIG {
 
-	public $test = array(
+	public $default = array(
 		'datasource' => 'Database/Mysql',
 		'persistent' => false,
 		'host' => 'localhost',
@@ -70,14 +70,15 @@ class DATABASE_CONFIG {
 		//'encoding' => 'utf8',
 	);
 
-	public $default = array(
+	public $live = array(
 		'datasource' => 'Database/Mysql',
 		'persistent' => false,
 		'host' => 'localhost',
-		'login' => 'root',
-		'password' => '17BWOdqs5amp',
-		'database' => 'fantasyfootball',
+		'login' => 'twentyword_prod',
+		'password' => 'vZ6I5ZM0',
+		'database' => 'twentyword_prod',
 		'prefix' => '',
 		//'encoding' => 'utf8',
 	);
+
 }
