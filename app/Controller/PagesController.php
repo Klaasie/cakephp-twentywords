@@ -43,7 +43,12 @@ class PagesController extends AppController {
  *
  * @var array
  */
-	public $uses = array();
+	public $uses = array('Language');
+
+	public function beforeFilter() {
+		parent::beforeFilter();
+		$this->Auth->allow('display');
+	}
 
 /**
  * Displays a view
@@ -69,7 +74,12 @@ class PagesController extends AppController {
 		if (!empty($path[$count - 1])) {
 			$title_for_layout = Inflector::humanize($path[$count - 1]);
 		}
+
+		$languages = $this->Language->find('all', array('conditions' => array('language' => $this->Session->read('Config.language'))));
+
+		$this->set('languages', $languages);
 		$this->set(compact('page', 'subpage', 'title_for_layout'));
+		$this->set('jsIncludes', array('custom'));
 		$this->render(implode('/', $path));
 	}
 }

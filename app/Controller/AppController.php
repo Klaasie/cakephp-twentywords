@@ -33,4 +33,62 @@ App::uses('Controller', 'Controller');
  */
 class AppController extends Controller {
 	public $useDbConfig = 'live';
+
+	public $uses = array('User');
+
+	public $components = array(
+		'Session',
+		'Auth' => array(
+			'loginRedirect' => '/dashboard/',
+			'logoutRedirect' => array(
+				'controller' => 'pages',
+				'action' => 'display',
+				'home'
+			)
+		),
+		'DebugKit.Toolbar'
+	);
+
+	public function beforeFilter() {
+		$this->Session->delete('Config.language'); // For debugging.
+
+		$user = $this->User->findById($this->Auth->User('id'));
+		if(isset($user['User'])){
+			$user = $user['User'];
+			$this->Session->write('User', $user);
+		}
+
+		Configure::write('Config.language', 'eng'); // Default
+
+		if($this->Session->read('User.language')){
+			$this->Session->write('Config.language', $this->Session->read('User.language'));
+		}else{
+			$this->_checkBrowserLanguage(); // Getting browser language
+		}
+
+	}
+
+	/**
+	 * Read the browser language and sets the website language to it if available. 
+	 * 
+	 */
+	protected function _checkBrowserLanguage(){
+		if(!$this->Session->check('Config.language')){
+			
+			//checking the 1st favorite language of the user's browser 
+			$browserLanguage = substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2);
+
+			//available languages
+			switch ($browserLanguage){
+				case "en":
+					$this->Session->write('Config.language', 'eng');
+					break;
+				case "nl":
+					$this->Session->write('Config.language', 'ned');
+					break;
+				default:
+					$this->Session->write('Config.language', 'eng');
+			}
+		}
+	} 
 }
