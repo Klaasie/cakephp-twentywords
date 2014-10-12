@@ -1,0 +1,168 @@
+# LANGUAGE translation of CakePHP Application
+# Copyright YEAR NAME <EMAIL@ADDRESS>
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"POT-Creation-Date: 2014-10-07 19:45+0000\n"
+"PO-Revision-Date: 2014-10-07 21:50+0100\n"
+"Last-Translator: \n"
+"Language-Team:  <EMAIL@ADDRESS>\n"
+"Language: nl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.6.9\n"
+
+#: Controller/UsersController.php:22;33
+msgid "Verkeerde gebruikersnaam, e-mail adres of wachtwoord"
+msgstr "Verkeerde gebruikersnaam, e-mail adres of wachtwoord"
+
+#: Controller/UsersController.php:53;104;125
+msgid "Invalid user"
+msgstr "Ongeldige gebruiker"
+
+#: Controller/UsersController.php:70
+msgid "Je account is aangemaakt!"
+msgstr "Je account is aangemaakt!"
+
+#: Controller/UsersController.php:78
+msgid "Er ging iets fout!"
+msgstr "Er ging iets fout!"
+
+#: Controller/UsersController.php:108
+msgid "The user has been saved"
+msgstr "De gebruiker is opgeslagen"
+
+#: Controller/UsersController.php:112
+msgid "De gegevens Konden niet opgeslagen worden. Probeer astublieft opnieuw."
+msgstr "De gegevens konden niet opgeslagen worden. Probeer asjeblieft opnieuw."
+
+#: Controller/UsersController.php:128
+msgid "User deleted"
+msgstr "Gebruiker verwijderd"
+
+#: Controller/UsersController.php:131
+msgid "User was not deleted"
+msgstr "Gebruiker is niet verwijderd"
+
+#: View/Layouts/default.ctp:72
+msgid "Inloggen"
+msgstr "Inloggen"
+
+#: View/Layouts/default.ctp:75;76 View/Pages/home.ctp:69;71
+msgid "Gebruikersnaam"
+msgstr "Gebruikersnaam"
+
+#: View/Layouts/default.ctp:79;80 View/Pages/home.ctp:81;83
+msgid "Wachtwoord"
+msgstr "Wachtwoord"
+
+#: View/Layouts/default.ctp:82
+msgid "Log in"
+msgstr "Log in"
+
+#: View/Layouts/default.ctp:91
+msgid "Dashboard"
+msgstr "Dashboard"
+
+#: View/Layouts/default.ctp:92 View/Users/profile.ctp:4
+msgid "Profiel"
+msgstr "Profiel"
+
+#: View/Layouts/default.ctp:94;100
+msgid "Uitloggen"
+msgstr "Uitloggen"
+
+#: View/Layouts/default.ctp:116
+msgid "Twenty Words | 2014"
+msgstr "Twenty Words | 2014"
+
+#: View/Pages/home.ctp:23
+msgid "Ontdek, herhaal en leer twintig woorden per dag"
+msgstr "Ontdek, herhaal en leer twintig woorden per dag"
+
+#: View/Pages/home.ctp:30
+msgid "Ontdek zeven nieuwe woorden"
+msgstr "Ontdek zeven nieuwe woorden"
+
+#: View/Pages/home.ctp:31
+msgid ""
+"Door telkens zeven nieuwe woorden te ontdekken, is het leren van een nieuwe "
+"taal opeens wel heel makkelijk!"
+msgstr ""
+"Door telkens zeven nieuwe woorden te ontdekken, is het leren van een nieuwe "
+"taal opeens wel heel makkelijk!"
+
+#: View/Pages/home.ctp:39
+msgid "Herhaal zeven woorden en nog eens zes"
+msgstr "Herhaal zeven woorden en nog eens zes"
+
+#: View/Pages/home.ctp:40
+msgid ""
+"Herhaal je geleerde woorden en zorg er zo voor dat je elk woord opslaat in "
+"je langetermijngeheugen!"
+msgstr ""
+"Herhaal je geleerde woorden en zorg er zo voor dat je elk woord opslaat in "
+"je langetermijngeheugen!"
+
+#: View/Pages/home.ctp:48
+msgid "Leer twintig woorden"
+msgstr "Leer twintig woorden"
+
+#: View/Pages/home.ctp:49
+msgid ""
+"Leer met Twenty Words op deze manier gemakkelijk een nieuwe taal om je beter "
+"te kunnen redden op vakantie!"
+msgstr ""
+"Leer met Twenty Words op deze manier gemakkelijk een nieuwe taal om je beter "
+"te kunnen redden op vakantie!"
+
+#: View/Pages/home.ctp:66
+msgid "Registreer"
+msgstr "Registreer"
+
+#: View/Pages/home.ctp:75
+msgid "E-mail"
+msgstr "E-mail"
+
+#: View/Pages/home.ctp:77 View/Users/profile.ctp:11
+msgid "E-mail adres"
+msgstr "E-mail adres"
+
+#: View/Pages/home.ctp:87 View/Users/profile.ctp:15
+msgid "Taal"
+msgstr "Taal"
+
+#: View/Pages/home.ctp:90;101
+msgid "Selecteer een taal"
+msgstr "Selecteer een taal"
+
+#: View/Pages/home.ctp:98
+msgid "Ik wil leren:"
+msgstr "Ik wil leren:"
+
+#: View/Users/profile.ctp:7
+msgid "Username"
+msgstr "Gebruikersnaam"
+
+#: View/Users/profile.ctp:19
+msgid "Lerend"
+msgstr "Lerend"
+
+#: View/Users/profile.ctp:28
+msgid "Ranglijst"
+msgstr "Ranglijst"
+
+#: View/Users/profile.ctp:31;45
+msgid "Nog niets :("
+msgstr "Nog niets :("
+
+#: View/Users/profile.ctp:42
+msgid "Verworven"
+msgstr "Verworven"
+
+#: Model/User.php:validation for field password
+msgid "required"
+msgstr "verplicht"

@@ -1,0 +1,78 @@
+# LANGUAGE translation of CakePHP Application
+# Copyright YEAR NAME <EMAIL@ADDRESS>
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"POT-Creation-Date: 2014-10-04 20:09+0000\n"
+"PO-Revision-Date: 2014-10-04 22:15+0100\n"
+"Last-Translator: \n"
+"Language-Team:  <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.6.9\n"
+"Language: de\n"
+
+#: View/Layouts/default.ctp:55
+msgid "Inloggen"
+msgstr ""
+
+#: View/Layouts/default.ctp:58;59 View/Pages/home.ctp:64
+msgid "E-mail adres"
+msgstr ""
+
+#: View/Layouts/default.ctp:62;63 View/Pages/home.ctp:68;70
+msgid "Wachtwoord"
+msgstr ""
+
+#: View/Layouts/default.ctp:65
+msgid "Log in"
+msgstr ""
+
+#: View/Layouts/default.ctp:78
+msgid "Twenty Words | 2014"
+msgstr ""
+
+#: View/Pages/home.ctp:23
+msgid "Ontdek, herhaal en leer twintig woorden per dag"
+msgstr ""
+
+#: View/Pages/home.ctp:30
+msgid "Ontdek zeven nieuwe woorden"
+msgstr ""
+
+#: View/Pages/home.ctp:31
+msgid ""
+"Door telkens zeven nieuwe woorden te ontdekken, is het leren van een nieuwe "
+"taal opeens wel heel makkelijk!"
+msgstr ""
+
+#: View/Pages/home.ctp:39
+msgid "Herhaal zeven woorden en nog eens zes"
+msgstr ""
+
+#: View/Pages/home.ctp:40
+msgid ""
+"Herhaal je geleerde woorden en zorg er zo voor dat je elk woord opslaat in "
+"je langetermijngeheugen!"
+msgstr ""
+
+#: View/Pages/home.ctp:48
+msgid "Leer twintig woorden"
+msgstr ""
+
+#: View/Pages/home.ctp:49
+msgid ""
+"Leer met Twenty Words op deze manier gemakkelijk een nieuwe taal om je beter "
+"te kunnen redden op vakantie!"
+msgstr ""
+
+#: View/Pages/home.ctp:59
+msgid "Registreer"
+msgstr ""
+
+#: View/Pages/home.ctp:62
+msgid "E-mail"
+msgstr ""
