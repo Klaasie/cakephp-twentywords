@@ -1,0 +1,373 @@
+/**
+ * Tags
+ */
+body {
+	background: -moz-linear-gradient(top,  rgba(127,193,218,0.67) 0%, rgba(127,193,218,0.5) 50%, rgba(127,193,218,1) 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(127,193,218,0.67)), color-stop(50%,rgba(127,193,218,0.5)), color-stop(100%,rgba(127,193,218,1))); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top,  rgba(127,193,218,0.67) 0%,rgba(127,193,218,0.5) 50%,rgba(127,193,218,1) 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top,  rgba(127,193,218,0.67) 0%,rgba(127,193,218,0.5) 50%,rgba(127,193,218,1) 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top,  rgba(127,193,218,0.67) 0%,rgba(127,193,218,0.5) 50%,rgba(127,193,218,1) 100%); /* IE10+ */
+	background: linear-gradient(to bottom,  rgba(127,193,218,0.67) 0%,rgba(127,193,218,0.5) 50%,rgba(127,193,218,1) 100%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ab7fc1da', endColorstr='#7fc1da',GradientType=0 ); /* IE6-9 */
+	background-attachment: fixed;
+}
+
+h1, h2, h3, h4, h5, p, label, span {
+	margin: 0;
+	padding: 0;
+}
+
+h1, h2 {
+	font-family: 'Asap', sans-serif;
+	font-weight: bold;
+	font-style: italic;
+	color: #062a4c;
+	background: transparent;
+}
+
+h3, h4, h5, p, label, a {
+	font-family: "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Geneva, Verdana, sans-serif;
+}
+
+h1 {
+	font-size: 30px;
+}
+
+a {
+	color: #fff;
+	font-size: 0.875em;
+	font-weight: bold;
+}
+
+a:hover {
+	color: #fff;
+	text-decoration: underline;
+}
+
+button {
+	font-family: "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Geneva, Verdana, sans-serif;
+	font-size: 14px;
+	font-weight: bold;
+}
+
+button.btn-green {
+	background: #78bc6e;
+	color: #fff;
+	border: none;
+	padding: 7px 15px;
+	width: 100%;
+}
+
+button.btn-green:hover{
+	color: #fff;
+	background: #8FCF86;
+}
+
+form {
+	width: 100%;
+}
+
+form div {
+	clear: none;
+}
+
+/**
+ * Structure
+ */
+
+/**
+ *	Header
+ */
+#header {
+	height: 70px;
+	color: white;
+	margin-top: 20px;
+}
+
+#header .logo {
+	float: left;
+	margin-top: 10px;
+}
+
+#header .login {
+	visibility: hidden;
+}
+
+#header .showLogin {
+	float: right;
+	margin-top: 14px;
+}
+
+#header .navbar-default {
+	background-color: transparent;
+	border-color: transparent;
+}
+
+#header .navbar-default .navbar-nav > .open > a{
+	color: #fff;
+	text-decoration: underline;
+	background-color: transparent;
+}
+
+#header .navbar-nav > li > a {
+	padding-top: 15px;
+	padding-bottom: 0;
+	text-align: right;
+	color: #fff;
+}
+
+#header .navbar-nav > li > a:hover {
+	text-decoration: underline;
+}
+
+#header .dropdown-menu > li > a {
+	text-align: right;
+}
+
+#header .login .form-group input.form-control {
+	background: rgba(255,255,255,.7);
+	border: none;
+	padding: 0 15px 0 15px;
+	height: 34px;
+}
+
+#header .login .form-group {
+	display: inline-block;
+}
+
+#header .login .btn-login {
+	width: auto;
+}
+
+/**
+ * Content
+ */
+#content {
+	background: transparent;
+}
+
+.page-content {
+	background: #dff0f6;
+	margin-top: 20px;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+}
+
+#content #intro {
+	padding: 25px;
+	background: #062a4c;
+}
+
+#content #intro h1 {
+	color: #fff;
+	font-size: 1.5em;
+}
+
+#content #register {
+	margin-top: 15px;
+}
+
+#content #register form{
+	padding: 10px;
+	background: #CBE5EF;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+}
+
+#content #register form .title {
+	margin: 0 0 15px 15px;
+}
+
+#content #register .currentCourse {
+	padding: 10px;
+	background: #CBE5EF;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+}
+
+#content .login-block {
+	margin: 10px 0 10px 0;
+}
+
+#content .login-block h2 {
+	margin-bottom: 20px;
+}
+
+.form-signin input[type="text"] {
+	margin-bottom: -1px;
+	border-bottom-right-radius: 0;
+	border-bottom-left-radius: 0;
+}
+
+.form-signin input[type="password"] {
+	margin-top: -1px;
+	border-top-right-radius: 0;
+	border-top-left-radius: 0;
+}
+
+#content .login-block .btn-login {
+	margin-top: 10px;
+}
+
+
+
+/**
+ * Footer
+ */
+#footer {
+	margin: 10px 0;
+	text-align: center;
+}
+
+#footer span {
+	color: #fff;
+	font-size: 0.875em;
+}
+
+/**
+ * Elements
+ */
+.panel {
+	float: left;
+	padding: 15px;
+}
+
+.panel:first-child {
+	margin-top: 15px;
+}
+
+.panel .left {
+	float: left;
+	width: 70%;
+}
+
+.panel .right {
+	float: right;
+	width: 30%;
+}
+
+.panel .right img {
+	width: 100%;
+}
+
+.panel .title {
+	font-size: 1.17em;
+	color: #062a4c;
+	font-weight: bold;
+	margin: 10px 0;
+}
+
+.block {
+	margin-top: 15px;
+	margin-bottom: 15px;
+	background-color: #fff;
+	border: 1px solid transparent;
+	border-radius: 4px;
+	-webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+	box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+}
+
+.block h2.title {
+	width: 100px;
+	margin: 15px 0 0 15px;
+	text-align: right;
+}
+
+.block .content {
+	margin: 15px 15px 15px 15px;
+}
+
+/**
+ * Dashboard page
+ */
+#content .category {
+	padding: 25px;
+	background: #062a4c;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	margin-bottom: 20px;
+}
+
+#content .category:first-child {
+	margin-top: 15px;
+}
+
+#content .success {
+	background-color: #78bc6e;
+}
+
+#content .process {
+	background-color: #062a4c;
+}
+
+#content .locked {
+	background-color: #7fc1da;
+}
+
+#content .category h1 {
+	color: #fff;
+	font-size: 1.5em;
+	text-align: center;
+}
+
+#content .subcategory {
+	background: #dff0f6;
+	margin-bottom: 20px;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+}
+
+#content .subcategory .block {
+	background: transparent;
+	-webkit-box-shadow: none;
+	box-shadow: none;
+}
+
+#content .subcategory .block img {
+	display: block;
+	margin: 0 auto;
+}
+
+#content .subcategory .block .title {
+	width: 100%;
+	text-align: center;
+	font-size: 14px;
+	font-weight: bold;
+	margin: 15px 0;
+
+}
+
+/**
+ * Profile page
+ */
+#content .profile {
+
+}
+
+#content .profile label {
+
+}
+
+#content .profile form {
+	width: 90%;
+}
+
+#content .profile .profileLabel {
+	width: 130px;
+	text-align: right;
+	margin-right: 10px;
+}
+
+#content .profile .editUser {
+	margin: 5px 5px 0 0;
+	cursor: pointer;
+}
+
+#content .rankings {
+
+}
