@@ -1,0 +1,11 @@
+$(document).ready(function(){
+	$('.editUser').click(function(){
+		if($('.userInfo').hasClass('hidden')){
+			$('.userInfo').removeClass('hidden');
+			$('.editUserForm').addClass('hidden');
+		}else{
+			$('.userInfo').addClass('hidden');
+			$('.editUserForm').removeClass('hidden');
+		}
+	});
+});
