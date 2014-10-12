@@ -46,7 +46,7 @@ class AppController extends Controller {
 				'home'
 			)
 		),
-		//'DebugKit.Toolbar'
+		'DebugKit.Toolbar'
 	);
 
 	public function beforeFilter() {
