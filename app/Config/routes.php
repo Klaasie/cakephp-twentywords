@@ -40,6 +40,8 @@
 	Router::connect('/resetpassword/', array('controller' => 'users', 'action' => 'resetPassword'));
 	Router::connect('/dashboard', array('controller' => 'courses', 'action' => 'dashboard'));
 	Router::connect('/dashboard/', array('controller' => 'courses', 'action' => 'dashboard'));
+	Router::connect('/test', array('controller' => 'courses', 'action' => 'test'));
+	Router::connect('/test/', array('controller' => 'courses', 'action' => 'test'));
 	Router::connect('/profile', array('controller' => 'users', 'action' => 'profile'));
 	Router::connect('/profile/', array('controller' => 'users', 'action' => 'profile'));
 	Router::connect(
