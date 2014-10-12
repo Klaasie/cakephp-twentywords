@@ -59,7 +59,7 @@
  */
 class DATABASE_CONFIG {
 
-	public $default = array(
+	public $develop = array(
 		'datasource' => 'Database/Mysql',
 		'persistent' => false,
 		'host' => 'localhost',
@@ -70,7 +70,7 @@ class DATABASE_CONFIG {
 		//'encoding' => 'utf8',
 	);
 
-	public $live = array(
+	public $default = array(
 		'datasource' => 'Database/Mysql',
 		'persistent' => false,
 		'host' => 'localhost',

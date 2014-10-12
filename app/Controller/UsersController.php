@@ -9,7 +9,7 @@ class UsersController extends AppController {
 
 	public function beforeFilter() {
 		parent::beforeFilter();
-		$this->Auth->allow('add', 'logout', 'resetPassword');
+		$this->Auth->allow('add', 'logout', 'login', 'resetPassword');
 	}
 
 	public function login() {
@@ -20,8 +20,12 @@ class UsersController extends AppController {
 				$user = $this->User->findByEmail($this->request->data['User']['username']);
 
 				if (empty($user)) {
-					$this->Session->setFlash(__('Verkeerde gebruikersnaam, e-mail adres of wachtwoord'));
-					return $this->redirect(array('controller' => 'pages', 'action' => 'display'));
+					$this->Session->setFlash(
+						__('Verkeerde gebruikersnaam, e-mail adres of wachtwoord'),
+						'default',
+						array('class' => 'alert alert-danger')
+					);
+					return $this->redirect('/login/');
 				}
 
 				$this->request->data['User']['username'] = $user['User']['username'];
@@ -35,7 +39,7 @@ class UsersController extends AppController {
 				'default',
 				array('class' => 'alert alert-danger')
 			);
-			return $this->redirect(array('controller' => 'pages', 'action' => 'display'));
+			return $this->redirect('/login/');
 		}
 	}
 
@@ -50,17 +54,32 @@ class UsersController extends AppController {
 				$newPassword = $this->generatePassword();
 				$data['User']['password'] = $newPassword;
 
-				//$this->User->id = $user['User']['id'];
-				//if($this->User->save($data)){
+				$this->User->id = $user['User']['id'];
+				if($this->User->save($data)){
 					$Email = new CakeEmail();
-					$Email->config('smtp');
+					$Email->emailFormat('html');
+					$Email->template('sendPassword', 'twentywords');
+					$Email->viewVars(array('title' => 'Wachwoord gereset','user' => $user, 'password' => $newPassword));
 					$Email->from(array('noreply@twentywords.nl' => 'Twenty Words'));
 					$Email->to($user['User']['email']);
 					$Email->subject(__('Nieuw wachtwoord'));
-					$Email->send('Beste '.$user["User"]["username"].', <br /> Je nieuwe wachtwoord is '.$newPassword.'.');
-				//}
-				
-				pr($newPassword);exit;
+					$Email->send();
+					
+					$this->Session->setFlash(
+						__('Een nieuw wachtwoord is naar je verstuurd!'),
+						'default',
+						array('class' => 'alert alert-success')
+					);
+					
+					return $this->redirect('/login/');
+				}else{
+					$this->Session->setFlash(
+						__('Er ging iets mis bij het opslaan!'),
+						'default',
+						array('class' => 'alert alert-danger')
+					);
+					return $this->redirect('/resetpassword');
+				}
 
 			} else {
 				$this->Session->setFlash(
@@ -68,6 +87,7 @@ class UsersController extends AppController {
 					'default',
 					array('class' => 'alert alert-danger')
 				);
+				return $this->redirect('/resetpassword');
 			}
 		}
 	}

@@ -44,19 +44,19 @@ class EmailConfig {
 
 	public $default = array(
 		'transport' => 'Mail',
-		'from' => 'you@localhost',
+		'from' => array('no-reply@twentywords.nl' => 'Twenty Words'),
 		//'charset' => 'utf-8',
 		//'headerCharset' => 'utf-8',
 	);
 
 	public $smtp = array(
 		'transport' => 'Smtp',
-		'from' => array('no-reply@twentywords.nl' => 'Twenty Words'),
+		'from' => array('twentyword@twentywords.nl' => 'Twenty Words'),
 		'host' => 'mail.twentywords.nl',
 		'port' => 25,
 		'timeout' => 30,
 		'username' => 'twentyword',
-		'password' => 'mail.twentywords.nl',
+		'password' => '0MQPtExhPc',
 		'client' => null,
 		'log' => false,
 		//'charset' => 'utf-8',

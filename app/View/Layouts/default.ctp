@@ -124,7 +124,7 @@ $cakeDescription = __d('cake_dev', 'Twenty Words');
 			}
 		}
 	?>
-	<?php //echo $this->Html->script('custom'); ?>
+	<?php echo $this->Html->script('custom'); ?>
 	<?php echo $this->element('sql_dump'); ?>
 </body>
 </html>
