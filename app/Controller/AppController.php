@@ -46,7 +46,7 @@ class AppController extends Controller {
 				'home'
 			)
 		),
-		'DebugKit.Toolbar'
+		//'DebugKit.Toolbar'
 	);
 
 	public function beforeFilter() {
@@ -65,6 +65,9 @@ class AppController extends Controller {
 		}else{
 			$this->_checkBrowserLanguage(); // Getting browser language
 		}
+
+		// Settings
+		$this->Auth->authError= __('Je bent niet bevoegd om die pagina te bezoeken.');
 
 	}
 

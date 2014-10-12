@@ -1,6 +1,7 @@
 <?php
 // app/Controller/UsersController.php
 App::uses('AppController', 'Controller');
+App::uses('CakeEmail', 'Network/Email');
 
 class UsersController extends AppController {
 
@@ -8,7 +9,7 @@ class UsersController extends AppController {
 
 	public function beforeFilter() {
 		parent::beforeFilter();
-		$this->Auth->allow('add', 'logout');
+		$this->Auth->allow('add', 'logout', 'resetPassword');
 	}
 
 	public function login() {
@@ -40,6 +41,35 @@ class UsersController extends AppController {
 
 	public function logout() {
 		return $this->redirect($this->Auth->logout());
+	}
+
+	public function resetPassword() {
+
+		if($data = $this->data){
+			if($user = $this->User->findByEmail($data['User']['email'])){
+				$newPassword = $this->generatePassword();
+				$data['User']['password'] = $newPassword;
+
+				//$this->User->id = $user['User']['id'];
+				//if($this->User->save($data)){
+					$Email = new CakeEmail();
+					$Email->config('smtp');
+					$Email->from(array('noreply@twentywords.nl' => 'Twenty Words'));
+					$Email->to($user['User']['email']);
+					$Email->subject(__('Nieuw wachtwoord'));
+					$Email->send('Beste '.$user["User"]["username"].', <br /> Je nieuwe wachtwoord is '.$newPassword.'.');
+				//}
+				
+				pr($newPassword);exit;
+
+			} else {
+				$this->Session->setFlash(
+					__('Er is geen account met dat e-mail adres gevonden.'),
+					'default',
+					array('class' => 'alert alert-danger')
+				);
+			}
+		}
 	}
 
 	public function index() {
@@ -198,6 +228,10 @@ class UsersController extends AppController {
 		}
 		$this->Session->setFlash(__('User was not deleted'));
 		return $this->redirect(array('action' => 'index'));
+	}
+
+	function generatePassword(){
+		return substr( str_shuffle( 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$' ) , 0 , 10 ); 
 	}
 
 }

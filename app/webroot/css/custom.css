@@ -74,6 +74,15 @@ form div {
 /**
  * Structure
  */
+#authMessage {
+	padding: 15px;
+	margin-bottom: 20px;
+	border: 1px solid transparent;
+	border-radius: 4px;
+	color: #a94442;
+	background-color: #f2dede;
+	border-color: #ebccd1;
+}
 
 /**
  *	Header
@@ -212,6 +221,12 @@ form div {
 	margin-top: 10px;
 }
 
+#content .login-block a.forgotPassword {
+	margin-bottom: 10px;
+	font-weight: normal;
+	font-style: italic;
+	color: #062a4c;
+}
 
 
 /**
