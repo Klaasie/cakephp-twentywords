@@ -22,7 +22,7 @@ class CoursesController extends AppController {
  *
  * @var array
  */
-	public $uses = array('Language', 'Course', 'Input', 'Statistic', 'CategoriesNed', 'CategoriesSpa', 'Sentences_ned', 'Sentences_spa');
+	public $uses = array('User','Language', 'Course', 'Input', 'Statistic', 'CategoriesNed', 'CategoriesSpa', 'SentencesNed', 'SentencesSpa');
 
 
 	public $components = array('RequestHandler');
@@ -62,7 +62,36 @@ class CoursesController extends AppController {
 	}
 
 	public function test(){
-		// Logic
+		$this->set('jsIncludes', array('courses/test'));
+	}
+
+	public function getQuestions(){
+		$this->autoRender = false;
+
+		// vars
+		$user = $this->User->findById($this->Session->read('User.id'));
+		$langCur = 'Sentences'.ucfirst($user['User']['language']);
+		$langLearn = 'Sentences'.ucfirst($user['User']['learn']);
+
+		$currentInput = $this->Input->find('first', 
+			array('conditions' => 
+				array('user_id' => $user['User']['id']),
+				'order' => array('id' => 'DESC')
+			)
+		);
+
+		if(isset($currentInput['Input'])){
+			// Resuming
+		}else{
+			// First time
+			$questionsLang = $this->$langCur->find('all', array('conditions' => array('id BETWEEN ? AND ?' => array(1,7))));
+			$questionsLearn = $this->$langLearn->find('all', array('conditions' => array('id BETWEEN ? AND ?' => array(1,7))));
+		}
+
+		$questions[$langCur] = $questionsLang;
+		$questions[$langLearn] = $questionsLearn;
+
+		return json_encode($questions);
 	}
 }
 ?>

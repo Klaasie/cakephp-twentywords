@@ -175,6 +175,7 @@ form div {
 
 #content #register {
 	margin-top: 15px;
+	margin-bottom: 15px;
 }
 
 #content #register form{
@@ -386,3 +387,12 @@ form div {
 #content .rankings {
 
 }
+
+/**
+ * Override bootstrap
+ */
+
+ .row {
+ 	margin-left: 0;
+ 	margin-right: 0;
+ }
