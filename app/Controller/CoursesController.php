@@ -62,10 +62,16 @@ class CoursesController extends AppController {
 	}
 
 	public function test(){
+		$curLang = $this->Session->read('User.language');
+		$learnLang = $this->Session->read('User.learn');
+
+
+		$this->set('curLang', $curLang);
+		$this->set('learnLang', $learnLang);
 		$this->set('jsIncludes', array('courses/test'));
 	}
 
-	public function getQuestions(){
+	public function start(){
 		$this->autoRender = false;
 
 		// vars
@@ -84,14 +90,47 @@ class CoursesController extends AppController {
 			// Resuming
 		}else{
 			// First time
-			$questionsLang = $this->$langCur->find('all', array('conditions' => array('id BETWEEN ? AND ?' => array(1,7))));
-			$questionsLearn = $this->$langLearn->find('all', array('conditions' => array('id BETWEEN ? AND ?' => array(1,7))));
+			$questionsLang = $this->$langCur->find('first', array('conditions' => array('id' => 1)));
+			$questionsLearn = $this->$langLearn->find('first', array('conditions' => array('id' => 1)));
 		}
 
-		$questions[$langCur] = $questionsLang;
-		$questions[$langLearn] = $questionsLearn;
+		$questions['current'] = $questionsLang[$langCur];
+		$questions['learn'] = $questionsLearn[$langLearn];
 
 		return json_encode($questions);
 	}
+
+	public function nextQuestion(){
+
+	}
+
+	// public function getQuestions(){
+	// 	$this->autoRender = false;
+
+	// 	// vars
+	// 	$user = $this->User->findById($this->Session->read('User.id'));
+	// 	$langCur = 'Sentences'.ucfirst($user['User']['language']);
+	// 	$langLearn = 'Sentences'.ucfirst($user['User']['learn']);
+
+	// 	$currentInput = $this->Input->find('first', 
+	// 		array('conditions' => 
+	// 			array('user_id' => $user['User']['id']),
+	// 			'order' => array('id' => 'DESC')
+	// 		)
+	// 	);
+
+	// 	if(isset($currentInput['Input'])){
+	// 		// Resuming
+	// 	}else{
+	// 		// First time
+	// 		$questionsLang = $this->$langCur->find('all', array('conditions' => array('id BETWEEN ? AND ?' => array(1,7))));
+	// 		$questionsLearn = $this->$langLearn->find('all', array('conditions' => array('id BETWEEN ? AND ?' => array(1,7))));
+	// 	}
+
+	// 	$questions[$langCur] = $questionsLang;
+	// 	$questions[$langLearn] = $questionsLearn;
+
+	// 	return json_encode($questions);
+	// }
 }
 ?>

@@ -1,12 +1,22 @@
 var test = new function(){
-	this.questions;
+	this.question;
 	this.score;
 
-	this.get = function(){
-
+	this.start = function(){
 		$.ajax({
 			type: 'get',
-			url: '/twentywords/courses/getQuestions',
+			url: '/twentywords/courses/start',
+			dataType: "json",
+		}).done(function(data){
+			test.question = data;
+			test.show();
+		});
+	}
+
+	this.get = function(){
+		$.ajax({
+			type: 'get',
+			url: '/twentywords/courses/getQuestion',
 			dataType: "json",
 		}).done(function(data){
 			test.questions = data;
@@ -15,23 +25,24 @@ var test = new function(){
 	};
 
 	this.show = function(){
-		var html = '';
-// console.log(test.questions['SentencesNed']);
-		html += '<div class="test_block">';
+		var currentLang = '';
+		var learnLang = '';
 
-			html += '<div class="curLanguage">';
-				html += '<p>' + test.questions['SentencesNed'][0]['SentencesNed']['front'] + test.questions['SentencesNed'][0]['SentencesNed']['word'] + test.questions['SentencesNed'][0]['SentencesNed']['back'] + '</p>';
-			html += '</div>';
+		currentLang += '<span class="part1">' + test.question['current']['front'] + '</span>';
+		currentLang += '<span class="asking">' + test.question['current']['word'] + '</span>';
+		currentLang += '<span class="part2">' + test.question['current']['back'] + '</span>';
 
-			html += '<div class="learnLanguage">';
-				html += '<p>' + test.questions['SentencesSpa'][0]['SentencesSpa']['front'] + '<input type="text" name="" class="">' + test.questions['SentencesSpa'][0]['SentencesSpa']['back'] + '</p>';
-			html += '</div>';
+		learnLang += '<span class="part1">' + test.question['learn']['front'] + '</span>';
+		learnLang += '<input class="answer" autocomplete="off" type="text">';
+		learnLang += '<span class="part2">' + test.question['learn']['back'] + '</span>';
 
-		html += '</div>';
-// console.log(html);
-		$('.page-content').html(html);
+		$('.currentLanguage').html(currentLang);
+		$('.toTranslate').html(learnLang);
 
-		console.log(test.questions);
+		TweenMax.to($('.currentLanguage'), 1, {autoAlpha:1});
+		TweenMax.to($('.toTranslate'), 1, {autoAlpha:1});
+
+		console.log(test.question);
 	}
 }
 
@@ -39,6 +50,6 @@ var test = new function(){
 $(document).ready(function(){
 	console.log('Document is ready');
 
-	test.get();
+	test.start();
 
 });
