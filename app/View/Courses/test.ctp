@@ -5,25 +5,16 @@
 			<li class="sentence-lang-<?php echo $curLang; ?>">
 				<span class="lang-flag"></span>
 				<div class="currentLanguage">
-<!--
-					<span class="part1"></span>
-					<span class="asking">Goedendag</span>
-					<span class="part2">, jongen en meisje. Hoe heten jullie?</span>
--->
+
 				</div>
 			</li>
-
-			<span class="answer-wrong"></span>
 
 			<li class="sentence-learn-<?php echo $learnLang; ?>">
 				<span class="lang-flag"></span>
 				<div class="toTranslate">
-<!--			
-					<span class="part1"></span>
-					<input class="answer" autocomplete="off" type="text">
-					<span class="part2">, niño y niña. ¿Cómo os llamáis?</span>
--->
+
 				</div>
+				<span class="alert alert-danger wrongAnswer"><?php echo __('Helaas! Verkeerde antwoord.'); ?></span>
 			</li>
 
 			<li>

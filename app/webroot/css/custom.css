@@ -451,6 +451,13 @@ ul.test li.sentence-learn-spa .lang-flag {
 	background: url(../img/flag-spa-blue.png);
 }
 
+ul.test li span.wrongAnswer {
+	position: absolute;
+	padding: 5px;
+	color: #a94442;
+	visibility: hidden;
+}
+
 ul.test li button.checkAnswer {
 	position: relative;
 	display: block;
