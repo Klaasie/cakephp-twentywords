@@ -2,6 +2,7 @@ var test = new function(){
 	this.question;
 	this.score = [];
 	this.score['false'] = 0;
+	this.score['good'] = 0;
 
 	this.start = function(){
 		$.ajax({
@@ -13,21 +14,6 @@ var test = new function(){
 			test.show();
 		});
 	}
-
-	this.get = function(){
-		// Hiding previous question with fade out.
-		TweenMax.to($('.currentLanguage'), 1, {autoAlpha:0});
-		TweenMax.to($('.toTranslate'), 1, {autoAlpha:0});
-
-		$.ajax({
-			type: 'get',
-			url: '/twentywords/courses/getQuestion',
-			dataType: "json",
-		}).done(function(data){
-			test.questions = data;
-			test.show();
-		});
-	};
 
 	this.show = function(){
 		var currentLang = '';
@@ -54,15 +40,15 @@ var test = new function(){
 		});
 
 		// Fading in.
-		TweenMax.to($('.currentLanguage'), 0.5, {autoAlpha:1, delay: 0.5});
-		TweenMax.to($('.toTranslate'), 0.5, {autoAlpha:1, delay: 0.5});
+		/*TweenMax.to($('.currentLanguage'), 0.5, {autoAlpha:1, delay: 0.5});
+		TweenMax.to($('.toTranslate'), 0.5, {autoAlpha:1, delay: 0.5});*/
 
 		console.log(test.question);
 	}
 
 	this.checkAnswer = function() {
 		// Checking if we're in the middle of displaying the answer.
-		if($('.wrongAnswer').css('visibility') == 'visible'){
+		if($('.answer').hasClass('showAnswer')){
 			return false;
 		}
 
@@ -72,33 +58,80 @@ var test = new function(){
 		if(givenAnswer == correctAnswer){
 			// Answer is correct
 			console.log('Correct!');
-			//this.save();
-			//this.nextQuestion();
+			this.score['good'] = 1;
+			this.save();
+		} else if(this.score['false'] == 1){
+			// Move to next question anyway.
+			console.log('Lets just move on!');
+
+			this.score['false'] += 1;
+
+			this.save();
 		} else {
 			console.log('Incorrect!');
 			this.showAnswer();
+
+			this.score['false'] += 1;
+//			console.log(this.score);
+
+			// Hide correct answer
+			setTimeout(function(){
+				test.hideAnswer();
+			},3000);
 		}
 
-	}
+	};
 
 	this.showAnswer = function() {
 		// Show correct answer
-		$('.wrongAnswer').css({'visibility': 'visible'});
+		$('.answer').addClass('showAnswer');
 		$('.answer').val(this.question['learn']['word']);
 		$('.answer').attr('disabled', true);
+	};
 
-		this.score['false'] += 1;
+	this.hideAnswer = function() {
+		$('.answer').removeClass('showAnswer');
+		$('.answer').val('');
+		$('.answer').attr('disabled', false);
+	};
 
-		console.log(this.score);
+	this.save = function() {
+		var data = [];
+		data['Input'] = [];
 
-		// Hide correct answer
-		setTimeout(function(){
-			$('.wrongAnswer').css({'visibility': 'hidden'});
-			$('.answer').val('');
-			$('.answer').attr('disabled', false);
-		},3000)
+		data['Input']['sentence_id'] = this.question['learn']['id'];
+		data['Input']['good'] = this.score['good'];
+		data['Input']['false'] = this.score['false'];
 
+		$.ajax({
+			type: 'post',
+			data: {
+				'sentence_id': this.question['learn']['id'],
+				'good': this.score['good'],
+				'false': this.score['false']
+			},
+			url: '/twentywords/courses/save',
+		}).done(function(data){
+			test.nextQuestion();
+		});
+	};
+
+	this.nextQuestion = function(){
+
+		$.ajax({
+			type: 'get',
+			url: '/twentywords/courses/nextQuestion',
+			dataType: "json",
+		}).done(function(data){
+			test.score['good'] = 0;
+			test.score['false'] = 0;
+
+			test.question = data;
+			test.show();
+			;
+		});
 	}
+
 }
 
 

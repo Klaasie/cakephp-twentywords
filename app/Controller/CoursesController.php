@@ -100,8 +100,65 @@ class CoursesController extends AppController {
 		return json_encode($questions);
 	}
 
-	public function nextQuestion(){
+	public function save(){
+		$this->autoRender = false;
 
+		$data = array();
+
+		// User data
+		$data['Input']['user_id'] = $this->Session->read('User.id');
+
+		$data['Input']['sentence_id'] = $this->data['sentence_id'];
+		$data['Input']['good'] = $this->data['good'];
+		$data['Input']['false'] = $this->data['false'];
+
+		if($inputExists = $this->Input->find('first', array('conditions' => array('user_id' => $data['Input']['user_id'], 'sentence_id' => $data['Input']['sentence_id'])))){
+			// Input already exists
+			$this->Input->id = $inputExists['Input']['id'];
+			// Update data
+			$data['Input']['good'] += $inputExists['Input']['good'];
+			$data['Input']['false'] += $inputExists['Input']['false'];
+			if($inputExists['Input']['successfull'] == NULL && $data['Input']['good'] >= 1){
+				$data['Input']['successfull'] = date();
+			}
+
+			$this->Input->save($data);
+		} else {
+			// This one has not been answered before.
+			if($data['Input']['good'] >= 1){
+				$data['Input']['successfull'] = date('Y-m-d H:i:s');
+			}
+
+			$this->Input->create();
+			$this->Input->save($data);
+		}
+
+	}
+
+	public function nextQuestion(){
+		$this->autoRender = false;
+
+		// vars
+		$user = $this->User->findById($this->Session->read('User.id'));
+		$langCur = 'Sentences'.ucfirst($user['User']['language']);
+		$langLearn = 'Sentences'.ucfirst($user['User']['learn']);
+
+		$currentInput = $this->Input->find('first', 
+			array('conditions' => 
+				array('user_id' => $user['User']['id']),
+				'order' => array('id' => 'DESC')
+			)
+		);
+
+		$id = $currentInput['Input']['sentence_id'] + 1;
+
+		$questionsLang = $this->$langCur->find('first', array('conditions' => array('id' => $id)));
+		$questionsLearn = $this->$langLearn->find('first', array('conditions' => array('id' => $id)));
+
+		$questions['current'] = $questionsLang[$langCur];
+		$questions['learn'] = $questionsLearn[$langLearn];
+
+		return json_encode($questions);
 	}
 
 	// public function getQuestions(){

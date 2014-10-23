@@ -29,6 +29,7 @@ $cakeDescription = __d('cake_dev', 'Twenty Words');
 
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 
+	<!-- Bring the favicon magic -->
 	<link rel="apple-touch-icon" sizes="57x57" href="<?php echo $this->webroot; ?>img/favicon/apple-touch-icon-57x57.png">
 	<link rel="apple-touch-icon" sizes="114x114" href="<?php echo $this->webroot; ?>img/favicon/apple-touch-icon-114x114.png">
 	<link rel="apple-touch-icon" sizes="72x72" href="<?php echo $this->webroot; ?>img/favicon/apple-touch-icon-72x72.png">
@@ -59,7 +60,7 @@ $cakeDescription = __d('cake_dev', 'Twenty Words');
 		echo $this->fetch('css');
 		echo $this->fetch('script');
 	?>
-	<!--<link href='http://fonts.googleapis.com/css?family=Asap:400,700,400italic,700italic' rel='stylesheet' type='text/css'>-->
+	<link href='http://fonts.googleapis.com/css?family=Asap:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
 </head>
 <body>
 	<div id="header">
@@ -68,7 +69,7 @@ $cakeDescription = __d('cake_dev', 'Twenty Words');
 			</div>
 			<div class="col-lg-9 col-md-9 col-sm-9 col-xs-9">
 				<div class="pull-right">
-					<?php if(!AuthComponent::user('id')): ?>
+					<?php if(!AuthComponent::user('id')): // If logged in. ?>
 						<a href="#" class="showLogin"><?php echo __('Inloggen'); ?></a>
 						<form id="login" class="form-inline login" role="form" method="POST" action="<?php echo $this->Html->url('/users/login/'); ?>">
 						<div class="form-group">
@@ -81,26 +82,25 @@ $cakeDescription = __d('cake_dev', 'Twenty Words');
 						</div>
 						<button type="submit" class="btn btn-default btn-green btn-login"><?php echo __('Log in'); ?></button>
 					</form>
-					<?php else: ?>
+					<?php else: // If not logged in. ?>
 						<nav class="navbar navbar-default" role="navigation">
 
-						<ul class="nav navbar-nav navbar-right">
-							<li class="dropdown">
-								<a href="#" class="dropdown-toggle" data-toggle="dropdown"><?php echo ucfirst($this->Session->read('User.username')); ?><span class="caret"></span></a>
-								<ul class="dropdown-menu" role="menu">
-									<li><a href="<?php echo $this->Html->url('/dashboard/'); ?>"><?php echo __('Dashboard'); ?></a></li>
-									<li><a href="<?php echo $this->Html->url('/profile/'); ?>"><?php echo __('Profiel') ?></a></li>
-									<li class="divider"></li>
-									<li><a href="<?php echo $this->Html->url('/users/logout/'); ?>"><?php echo __('Uitloggen') ?></a></li>
-								</ul>
-							</li>
-						</ul>
+							<ul class="nav navbar-nav navbar-right">
+								<li class="dropdown">
+									<a href="#" class="dropdown-toggle" data-toggle="dropdown"><?php echo ucfirst($this->Session->read('User.username')); ?><span class="caret"></span></a>
+									<ul class="dropdown-menu" role="menu">
+										<li><a href="<?php echo $this->Html->url('/dashboard/'); ?>"><?php echo __('Dashboard'); ?></a></li>
+										<li><a href="<?php echo $this->Html->url('/profile/'); ?>"><?php echo __('Profiel') ?></a></li>
+										<li class="divider"></li>
+										<li><a href="<?php echo $this->Html->url('/users/logout/'); ?>"><?php echo __('Uitloggen') ?></a></li>
+									</ul>
+								</li>
+							</ul>
 
 						</nav>
-						<!--<a href="<?php echo $this->Html->url('/users/logout/'); ?>"><?php echo __('Uitloggen'); ?></a>-->
 					<?php endif;?>
-				</div>
-			</div>
+				</div> <!-- .pull-right -->
+			</div> <!-- .col-lg-9 -->
 	</div> <!-- #Header -->
 	<div id="container" class="container">
 
@@ -111,13 +111,14 @@ $cakeDescription = __d('cake_dev', 'Twenty Words');
 			</div>
 
 			<?php echo $this->fetch('content'); ?>
-		</div><!-- #content -->
+		</div> <!-- #content -->
 		<div id="footer" class="row">
 			<span><?php echo __('Twenty Words | 2014');?></span>
 		</div> <!-- #footer -->
 
 	</div> <!-- #container -->
 	<?php
+		// Dynamic way of loading javascript per controller action.
 		if(isset($jsIncludes)){
 			foreach($jsIncludes as $js){
 				echo $this->Html->script($js);

@@ -405,11 +405,11 @@ ul.test li {
 }
 
 ul.test li .currentLanguage {
-	visibility: hidden;
+
 }
 
 ul.test li .toTranslate {
-	visibility: hidden;
+
 }
 
 ul.test li span {
@@ -426,6 +426,10 @@ ul.test li input.answer {
 	border: 1px solid #d2d7d9;
 	border-radius: 5px;
 	padding: 5px;
+}
+
+ul.test li input.showAnswer {
+	color: rgba(127,193,218,1);
 }
 
 ul.test li .lang-flag {
@@ -478,7 +482,7 @@ ul.test li button.checkAnswer {
 }
 
 ul.test li button.checkAnswer:hover {
-	background-color: #557CA1;
+	background-color: rgba(127,193,218,1);
 }
 
 /**
