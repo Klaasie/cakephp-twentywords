@@ -2,3 +2,5 @@ tmp/
 app/tmp/
 app/Plugin
 !empty
+.DS_Store
+._.DS_Store
