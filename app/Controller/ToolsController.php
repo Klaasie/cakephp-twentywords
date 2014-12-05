@@ -15,7 +15,7 @@ class ToolsController extends AppController {
  *
  * @var string
  */
-	public $name = 'Courses';
+	public $name = 'Tools';
 
 /**
  * Model names
@@ -68,6 +68,17 @@ class ToolsController extends AppController {
 		$this->layout = 'ajax';
 	}
 
+	/**
+	 * logout()
+	 *
+	 * Special logout method for cookie testing.
+	 */
+	public function manualLogout() {
+		// Logout
+		return $this->redirect($this->Auth->logout());
+	}
+
+
 //	Commenting these to prevent them from accidently executing.
 /*	public function saveCat() {
 		$this->autoRender = false;
@@ -88,4 +99,5 @@ class ToolsController extends AppController {
 		$this->Sentences_spa->save($data);
 	}
 */
+}
 ?>

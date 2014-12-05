@@ -5,6 +5,11 @@
 			<input type="text" class="form-control" name="data[User][username]" placeholder="<?php echo __('Gebruikersnaam'); ?>" required="" autofocus="">
 			<input type="password" class="form-control" name="data[User][password]" placeholder="<?php echo __('Wachtwoord'); ?>" required="">
 			<a href="<?php echo $this->Html->url('/resetpassword') ?>" class="forgotPassword pull-right"><?php echo __('Wachtwoord vergeten?'); ?></a>
+			<div class="checkbox">
+				<label>
+					<input type="checkbox" name="data[User][rememberme]"> <?php echo __('Herinner mij'); ?>
+				</label>
+			</div>
 			<button class="btn btn-lg btn-primary btn-block btn-login btn-green" type="submit"><?php echo __('Inloggen'); ?></button>
 		</form>
 	</div>

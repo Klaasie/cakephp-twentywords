@@ -46,11 +46,40 @@ class AppController extends Controller {
 				'home'
 			)
 		),
+		'Cookie',
 		'DebugKit.Toolbar'
 	);
 
 	public function beforeFilter() {
 		$this->Session->delete('Config.language'); // For debugging.
+
+		if(!AuthComponent::user('id')){
+			if($rememberme = $this->Cookie->read('twentywords')){
+				// Login for cookie reminder.
+				$rememberMe = $this->Cookie->read('twentywords');
+
+				$currentIp = Security::hash($_SERVER['REMOTE_ADDR'], 'sha1', true); // Want to use this for future checking
+
+				$user = $this->User->find('first', array('conditions' => array('hash' => $rememberMe['hash'])));
+
+				if(!empty($user)) {		// If user is found
+					// At this point I think we can safely assume the user is in fact him/herself.
+					if($this->Auth->login($user['User'])){
+						
+						// Updating cookie..
+						/*$hash = md5(uniqid($user['User']['email'], true));				// Unique hash for double security.
+
+						$this->Cookie->write('twentywords', array('ip' => $rememberMe['ip'], 'hash' => $hash));
+
+						$this->User->id = $user['User']['id'];
+						$this->User->save(array('hash' => $hash));*/
+
+						// redirecting user to dashboard.
+						//return $this->redirect($this->Auth->redirect());
+					}
+				}
+			}
+		}
 
 		$user = $this->User->findById($this->Auth->User('id'));
 		if(isset($user['User'])){

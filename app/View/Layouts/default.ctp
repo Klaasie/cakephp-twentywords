@@ -69,20 +69,36 @@ $cakeDescription = __d('cake_dev', 'Twenty Words');
 			</div>
 			<div class="col-lg-9 col-md-9 col-sm-9 col-xs-9">
 				<div class="pull-right">
-					<?php if(!AuthComponent::user('id')): // If logged in. ?>
+					<?php if(!AuthComponent::user('id')): // If not logged in. ?>
 						<a href="#" class="showLogin"><?php echo __('Inloggen'); ?></a>
 						<form id="login" class="form-inline login" role="form" method="POST" action="<?php echo $this->Html->url('/users/login/'); ?>">
-						<div class="form-group">
-							<label class="sr-only" for="data[User][username]"><?php echo __('Gebruikersnaam'); ?></label>
-							<input type="text" class="form-control" name="data[User][username]" placeholder="<?php echo __('Gebruikersnaam'); ?>">
-						</div>
-						<div class="form-group">
-							<label class="sr-only" for="data[User][password]"><?php echo __('Wachtwoord'); ?></label>
-							<input type="password" class="form-control" name="data[User][password]" placeholder="<?php echo __('Wachtwoord'); ?>">
-						</div>
-						<button type="submit" class="btn btn-default btn-green btn-login"><?php echo __('Log in'); ?></button>
+							<div class="row">
+								<div class="form-group">
+									<label class="sr-only" for="data[User][username]"><?php echo __('Gebruikersnaam'); ?></label>
+									<input type="text" class="form-control" name="data[User][username]" placeholder="<?php echo __('Gebruikersnaam'); ?>">
+								</div>
+								<div class="form-group">
+									<label class="sr-only" for="data[User][password]"><?php echo __('Wachtwoord'); ?></label>
+									<input type="password" class="form-control" name="data[User][password]" placeholder="<?php echo __('Wachtwoord'); ?>">
+								</div>
+								<button type="submit" class="btn btn-default btn-green btn-login"><?php echo __('Log in'); ?></button>
+							</div>
+							<div class="row">
+								<div class="col-sm-6">
+									<div class="passwordReminder">
+										<a href="<?php echo $this->Html->url('/resetpassword'); ?>"> <?php echo __('Wachtwoord vergeten?'); ?></a>
+									</div>
+								</div>
+								<div class="col-sm-4">
+									<div class="checkbox pull-right">
+										<label>
+											<input type="checkbox" name="data[User][rememberme]"> <?php echo __('Herinner mij'); ?>
+										</label>
+									</div>
+								</div>
+							</div>
 					</form>
-					<?php else: // If not logged in. ?>
+					<?php else: // If logged in. ?>
 						<nav class="navbar navbar-default" role="navigation">
 
 							<ul class="nav navbar-nav navbar-right">
