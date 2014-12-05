@@ -35,8 +35,14 @@
  * Routing the rest of the app.
  */
 	Router::connect('/login', array('controller' => 'users', 'action' => 'login'));
+	Router::connect('/login/', array('controller' => 'users', 'action' => 'login'));
 	Router::connect('/resetpassword', array('controller' => 'users', 'action' => 'resetPassword'));
+	Router::connect('/resetpassword/', array('controller' => 'users', 'action' => 'resetPassword'));
 	Router::connect('/dashboard', array('controller' => 'courses', 'action' => 'dashboard'));
+	Router::connect('/dashboard/', array('controller' => 'courses', 'action' => 'dashboard'));
+	Router::connect('/test', array('controller' => 'courses', 'action' => 'test'));
+	Router::connect('/test/', array('controller' => 'courses', 'action' => 'test'));
+	Router::connect('/profile', array('controller' => 'users', 'action' => 'profile'));
 	Router::connect('/profile/', array('controller' => 'users', 'action' => 'profile'));
 	Router::connect(
 		'/profile/:username',

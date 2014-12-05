@@ -22,7 +22,7 @@ class CoursesController extends AppController {
  *
  * @var array
  */
-	public $uses = array('Language', 'Course', 'Input', 'Statistic', 'CategoriesNed', 'CategoriesSpa', 'Sentences_ned', 'Sentences_spa');
+	public $uses = array('User','Language', 'Course', 'Input', 'Statistic', 'CategoriesNed', 'CategoriesSpa', 'SentencesNed', 'SentencesSpa');
 
 
 	public $components = array('RequestHandler');
@@ -61,59 +61,133 @@ class CoursesController extends AppController {
 		$this->set('input', $input);
 	}
 
-	/**
-	 * function to clear all cache data
-	 * by default accessible only for admin
-	 *
-	 * @access Public
-	 * @return void
-	 */
-	public function clear_cache() {
+	public function test(){
+		$curLang = $this->Session->read('User.language');
+		$learnLang = $this->Session->read('User.learn');
+
+
+		$this->set('curLang', $curLang);
+		$this->set('learnLang', $learnLang);
+		$this->set('jsIncludes', array('courses/test'));
+	}
+
+	public function start(){
 		$this->autoRender = false;
-		Cache::clear();
-		clearCache();
 
-		$files = array();
-		$files = array_merge($files, glob(CACHE . '*')); // remove cached css
-		$files = array_merge($files, glob(CACHE . 'css' . DS . '*')); // remove cached css
-		$files = array_merge($files, glob(CACHE . 'js' . DS . '*'));  // remove cached js           
-		$files = array_merge($files, glob(CACHE . 'models' . DS . '*'));  // remove cached models           
-		$files = array_merge($files, glob(CACHE . 'persistent' . DS . '*'));  // remove cached persistent           
+		// vars
+		$user = $this->User->findById($this->Session->read('User.id'));
+		$langCur = 'Sentences'.ucfirst($user['User']['language']);
+		$langLearn = 'Sentences'.ucfirst($user['User']['learn']);
 
-		foreach ($files as $f) {
-			if (is_file($f)) {
-				unlink($f);
-			}
+		$currentInput = $this->Input->find('first', 
+			array('conditions' => 
+				array('user_id' => $user['User']['id']),
+				'order' => array('id' => 'DESC')
+			)
+		);
+
+		if(isset($currentInput['Input'])){
+			// Resuming
+		}else{
+			// First time
+			$questionsLang = $this->$langCur->find('first', array('conditions' => array('id' => 1)));
+			$questionsLearn = $this->$langLearn->find('first', array('conditions' => array('id' => 1)));
 		}
 
-		if(function_exists('apc_clear_cache')):      
-		apc_clear_cache();
-		apc_clear_cache('user');
-		endif;
+		$questions['current'] = $questionsLang[$langCur];
+		$questions['learn'] = $questionsLearn[$langLearn];
 
-		$this->set(compact('files'));
-		$this->layout = 'ajax';
+		return json_encode($questions);
 	}
 
-//	Commenting these to prevent them from accidently executing.
-/*	public function saveCat() {
+	public function save(){
 		$this->autoRender = false;
 
-		$this->Categories_spa->create();
-		$this->Categories_spa->save($this->data);
+		$data = array();
+
+		// User data
+		$data['Input']['user_id'] = $this->Session->read('User.id');
+
+		$data['Input']['sentence_id'] = $this->data['sentence_id'];
+		$data['Input']['good'] = $this->data['good'];
+		$data['Input']['false'] = $this->data['false'];
+
+		if($inputExists = $this->Input->find('first', array('conditions' => array('user_id' => $data['Input']['user_id'], 'sentence_id' => $data['Input']['sentence_id'])))){
+			// Input already exists
+			$this->Input->id = $inputExists['Input']['id'];
+			// Update data
+			$data['Input']['good'] += $inputExists['Input']['good'];
+			$data['Input']['false'] += $inputExists['Input']['false'];
+			if($inputExists['Input']['successfull'] == NULL && $data['Input']['good'] >= 1){
+				$data['Input']['successfull'] = date();
+			}
+
+			$this->Input->save($data);
+		} else {
+			// This one has not been answered before.
+			if($data['Input']['good'] >= 1){
+				$data['Input']['successfull'] = date('Y-m-d H:i:s');
+			}
+
+			$this->Input->create();
+			$this->Input->save($data);
+		}
+
 	}
 
-	public function saveSentence(){
+	public function nextQuestion(){
 		$this->autoRender = false;
 
+		// vars
+		$user = $this->User->findById($this->Session->read('User.id'));
+		$langCur = 'Sentences'.ucfirst($user['User']['language']);
+		$langLearn = 'Sentences'.ucfirst($user['User']['learn']);
 
-		$data['front'] = htmlentities($this->data['front']);
-		$data['word'] = htmlentities($this->data['word']);
-		$data['back'] = htmlentities($this->data['back']);
+		$currentInput = $this->Input->find('first', 
+			array('conditions' => 
+				array('user_id' => $user['User']['id']),
+				'order' => array('id' => 'DESC')
+			)
+		);
 
-		$this->Sentences_spa->create();
-		$this->Sentences_spa->save($data);
+		$id = $currentInput['Input']['sentence_id'] + 1;
+
+		$questionsLang = $this->$langCur->find('first', array('conditions' => array('id' => $id)));
+		$questionsLearn = $this->$langLearn->find('first', array('conditions' => array('id' => $id)));
+
+		$questions['current'] = $questionsLang[$langCur];
+		$questions['learn'] = $questionsLearn[$langLearn];
+
+		return json_encode($questions);
 	}
-*/
+
+	// public function getQuestions(){
+	// 	$this->autoRender = false;
+
+	// 	// vars
+	// 	$user = $this->User->findById($this->Session->read('User.id'));
+	// 	$langCur = 'Sentences'.ucfirst($user['User']['language']);
+	// 	$langLearn = 'Sentences'.ucfirst($user['User']['learn']);
+
+	// 	$currentInput = $this->Input->find('first', 
+	// 		array('conditions' => 
+	// 			array('user_id' => $user['User']['id']),
+	// 			'order' => array('id' => 'DESC')
+	// 		)
+	// 	);
+
+	// 	if(isset($currentInput['Input'])){
+	// 		// Resuming
+	// 	}else{
+	// 		// First time
+	// 		$questionsLang = $this->$langCur->find('all', array('conditions' => array('id BETWEEN ? AND ?' => array(1,7))));
+	// 		$questionsLearn = $this->$langLearn->find('all', array('conditions' => array('id BETWEEN ? AND ?' => array(1,7))));
+	// 	}
+
+	// 	$questions[$langCur] = $questionsLang;
+	// 	$questions[$langLearn] = $questionsLearn;
+
+	// 	return json_encode($questions);
+	// }
 }
 ?>

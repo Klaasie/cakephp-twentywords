@@ -2,24 +2,48 @@
 // app/Controller/UsersController.php
 App::uses('AppController', 'Controller');
 App::uses('CakeEmail', 'Network/Email');
+App::uses('SimplePasswordHasher', 'Controller/Component/Auth');
 
 class UsersController extends AppController {
 
+	/**
+	 * Loading components
+	 */
+	public $components = array('Cookie');
+
+
+	/**
+	 * Loading models
+	 */
 	public $uses = array('User','Language', 'Course');
 
+	/**
+	 * beforeFilter();
+	 *
+	 * Executes before a user page loads.
+	 */
 	public function beforeFilter() {
 		parent::beforeFilter();
-		$this->Auth->allow('add', 'logout', 'login', 'resetPassword');
+		$this->Auth->allow('add', 'logout', 'login', 'resetPassword', 'rememberMeLogin');
 	}
 
+	/**
+	 * login()
+	 *
+	 * Processes the login form
+	 */
 	public function login() {
+
+		// Check if post is found.
 		if ($this->request->is('post')) {
+
 			// Enabling login by username / email
 			$user = $this->User->findByUsername($this->request->data['User']['username']);
 			if (empty($user)) {
 				$user = $this->User->findByEmail($this->request->data['User']['username']);
 
 				if (empty($user)) {
+					// No user found.
 					$this->Session->setFlash(
 						__('Verkeerde gebruikersnaam, e-mail adres of wachtwoord'),
 						'default',
@@ -32,8 +56,22 @@ class UsersController extends AppController {
 			}
 
 			if ($this->Auth->login()) {
+				// Check if they want to be remembered.
+				if($this->request->data['User']['rememberme']){
+					$ip = Security::hash($_SERVER['REMOTE_ADDR'], 'sha1', true);	// hashing ip for extra security.
+					$hash = md5(uniqid($user['User']['email'], true));				// Unique hash for double security.
+
+					$this->Cookie->write('twentywords', array('ip' => $ip, 'hash' => $hash));
+
+					$this->User->id = $user['User']['id'];
+					$this->User->save(array('ipaddress' => $ip, 'hash' => $hash));
+				}
+
+				// Redirect user to dashboard.
 				return $this->redirect($this->Auth->redirect());
 			}
+
+			// Wrong combination
 			$this->Session->setFlash(
 				__('Verkeerde gebruikersnaam, e-mail adres of wachtwoord'),
 				'default',
@@ -43,10 +81,57 @@ class UsersController extends AppController {
 		}
 	}
 
+	/**
+	 * rememberMeLogin()
+	 *
+	 * Executes when a cookie is found.
+	 */
+	public function rememberMeLogin(){
+		// Login for cookie reminder.
+		$rememberMe = $this->Cookie->read('twentywords');
+
+		$currentIp = Security::hash($_SERVER['REMOTE_ADDR'], 'sha1', true); // Want to use this for future checking
+
+		$user = $this->User->find('first', array('conditions' => array('hash' => $rememberMe['hash'])));
+
+		if(!empty($user)) {		// If user is found
+			// At this point I think we can safely assume the user is in fact him/herself.
+			if($this->Auth->login($user)){
+
+				// Updating cookie..
+				$hash = md5(uniqid($user['User']['email'], true));				// Unique hash for double security.
+
+				$this->Cookie->write('twentywords', array('ip' => $rememberMe['ip'], 'hash' => $hash));
+
+				$this->User->id = $user['User']['id'];
+				$this->User->save(array('hash' => $hash));
+
+				// redirecting user to dashboard.
+				return $this->redirect($this->Auth->redirect());
+			}
+		}
+	}
+
+	/**
+	 * logout()
+	 *
+	 * Destroys user session
+	 */
 	public function logout() {
+		// Remove potential cookie.
+		$this->Cookie->delete('twentywords');
+		$this->User->id = $this->Session->read('User.id');
+		$this->User->save(array('ipaddress' => NULL, 'hash' => NULL));
+
+		// Logout
 		return $this->redirect($this->Auth->logout());
 	}
 
+	/**
+	 * resetPassword()
+	 *
+	 * Method to sent a new password to the user.
+	 */
 	public function resetPassword() {
 
 		if($data = $this->data){
@@ -133,6 +218,12 @@ class UsersController extends AppController {
 		}
 	}
 
+	/**
+	 * profile()
+	 *
+	 * Loads profile page
+	 * @param $username name of user
+	 */
 	public function profile($username = NULL){
 		if($username){
 			$foreign = true;
@@ -155,6 +246,11 @@ class UsersController extends AppController {
 		$this->set('jsIncludes', array('users/profileEdit'));
 	}
 
+	/**
+	 * editUser()
+	 *
+	 * Method executed when new user data is saved.
+	 */
 	public function editUser(){
 		$this->autoRender = false;
 
@@ -192,6 +288,11 @@ class UsersController extends AppController {
 		$this->redirect('/profile/');
 	}
 
+	/**
+	 * editPassword
+	 *
+	 * Method executed when password is edited.
+	 */
 	public function editPassword(){
 		$this->autoRender = false;
 
@@ -235,6 +336,12 @@ class UsersController extends AppController {
 		$this->redirect('/profile/');
 	}
 
+	/**
+	 * delete()
+	 *
+	 * Deletes user
+	 * @todo Make this actually work
+	 */
 	public function delete($id = null) {
 		$this->request->onlyAllow('post');
 
@@ -250,6 +357,11 @@ class UsersController extends AppController {
 		return $this->redirect(array('action' => 'index'));
 	}
 
+	/**
+	 * generatePassword()
+	 *
+	 * Generates random password to use in the password reminder.
+	 */
 	function generatePassword(){
 		return substr( str_shuffle( 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$' ) , 0 , 10 ); 
 	}
