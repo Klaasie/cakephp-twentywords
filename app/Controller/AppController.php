@@ -67,15 +67,15 @@ class AppController extends Controller {
 					if($this->Auth->login($user['User'])){
 						
 						// Updating cookie..
-						/*$hash = md5(uniqid($user['User']['email'], true));				// Unique hash for double security.
+						$hash = md5(uniqid($user['User']['email'], true));				// Unique hash for double security.
 
 						$this->Cookie->write('twentywords', array('ip' => $rememberMe['ip'], 'hash' => $hash));
 
 						$this->User->id = $user['User']['id'];
-						$this->User->save(array('hash' => $hash));*/
+						$this->User->save(array('hash' => $hash));
 
 						// redirecting user to dashboard.
-						//return $this->redirect($this->Auth->redirect());
+						return $this->redirect($this->Auth->redirect());
 					}
 				}
 			}
