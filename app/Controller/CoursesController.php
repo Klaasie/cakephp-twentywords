@@ -79,25 +79,44 @@ class CoursesController extends AppController {
 		$langCur = 'Sentences'.ucfirst($user['User']['language']);
 		$langLearn = 'Sentences'.ucfirst($user['User']['learn']);
 
-		$currentInput = $this->Input->find('first', 
-			array('conditions' => 
-				array('user_id' => $user['User']['id']),
-				'order' => array('id' => 'DESC')
+		// First scheck if he is already finished for today.
+		$inputToday = $this->Input->find('count',
+			array(' conditions' => 
+				array(
+					'user_id' => $user['User']['id'],
+					'created' => date('Y-m-d')
+				),
 			)
 		);
 
-		if(isset($currentInput['Input'])){
-			// Resuming
-		}else{
-			// First time
-			$questionsLang = $this->$langCur->find('first', array('conditions' => array('id' => 1)));
-			$questionsLearn = $this->$langLearn->find('first', array('conditions' => array('id' => 1)));
+		if($inputToday >= 7){
+			return json_encode(array("result" => "completed"));
+		} else {
+			$currentInput = $this->Input->find('first', 
+				array('conditions' => 
+					array('user_id' => $user['User']['id']),
+					'order' => array('id' => 'DESC')
+				)
+			);
+
+			if(isset($currentInput['Input'])){
+				// Resuming
+				$id = $currentInput['Input']['sentence_id'] + 1;
+
+				$questionsLang = $this->$langCur->find('first', array('conditions' => array('id' => $id)));
+				$questionsLearn = $this->$langLearn->find('first', array('conditions' => array('id' => $id)));
+
+			}else{
+				// First time
+				$questionsLang = $this->$langCur->find('first', array('conditions' => array('id' => 1)));
+				$questionsLearn = $this->$langLearn->find('first', array('conditions' => array('id' => 1)));
+			}
+
+			$questions['current'] = $questionsLang[$langCur];
+			$questions['learn'] = $questionsLearn[$langLearn];
+
+			return json_encode($questions);
 		}
-
-		$questions['current'] = $questionsLang[$langCur];
-		$questions['learn'] = $questionsLearn[$langLearn];
-
-		return json_encode($questions);
 	}
 
 	public function save(){
@@ -143,22 +162,36 @@ class CoursesController extends AppController {
 		$langCur = 'Sentences'.ucfirst($user['User']['language']);
 		$langLearn = 'Sentences'.ucfirst($user['User']['learn']);
 
-		$currentInput = $this->Input->find('first', 
-			array('conditions' => 
-				array('user_id' => $user['User']['id']),
-				'order' => array('id' => 'DESC')
+		// First scheck if he is already finished for today.
+		$inputToday = $this->Input->find('count',
+			array(' conditions' => 
+				array(
+					'user_id' => $user['User']['id'],
+					'created' => date('Y-m-d')
+				),
 			)
 		);
 
-		$id = $currentInput['Input']['sentence_id'] + 1;
+		if($inputToday >= 7){
+			return "completed";
+		} else {
+			$currentInput = $this->Input->find('first', 
+				array('conditions' => 
+					array('user_id' => $user['User']['id']),
+					'order' => array('id' => 'DESC')
+				)
+			);
 
-		$questionsLang = $this->$langCur->find('first', array('conditions' => array('id' => $id)));
-		$questionsLearn = $this->$langLearn->find('first', array('conditions' => array('id' => $id)));
+			$id = $currentInput['Input']['sentence_id'] + 1;
 
-		$questions['current'] = $questionsLang[$langCur];
-		$questions['learn'] = $questionsLearn[$langLearn];
+			$questionsLang = $this->$langCur->find('first', array('conditions' => array('id' => $id)));
+			$questionsLearn = $this->$langLearn->find('first', array('conditions' => array('id' => $id)));
 
-		return json_encode($questions);
+			$questions['current'] = $questionsLang[$langCur];
+			$questions['learn'] = $questionsLearn[$langLearn];
+
+			return json_encode($questions);
+		}
 	}
 
 	// public function getQuestions(){

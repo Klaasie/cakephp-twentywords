@@ -7,7 +7,7 @@ var test = new function(){
 	this.start = function(){
 		$.ajax({
 			type: 'get',
-			url: '/twentywords/courses/start',
+			url: '/courses/start',
 			dataType: "json",
 		}).done(function(data){
 			test.question = data;
@@ -15,35 +15,40 @@ var test = new function(){
 		});
 	}
 
-	this.show = function(){
+	this.show = function(){ 
 		var currentLang = '';
 		var learnLang = '';
 
-		// Setting id for score component
-		this.score['id'] = this.question['learn']['id'];
+		if(test.question['result'] == "completed"){
+			$('ul.test').hide();
+			$('.test_finished').show();
+		} else{
+			// Setting id for score component
+			this.score['id'] = this.question['learn']['id'];
 
-		currentLang += '<span class="part1">' + test.question['current']['front'] + '</span>';
-		currentLang += '<span class="asking">' + test.question['current']['word'] + '</span>';
-		currentLang += '<span class="part2">' + test.question['current']['back'] + '</span>';
+			currentLang += '<span class="part1">' + test.question['current']['front'] + '</span>';
+			currentLang += '<span class="asking">' + test.question['current']['word'] + '</span>';
+			currentLang += '<span class="part2">' + test.question['current']['back'] + '</span>';
 
-		learnLang += '<span class="part1">' + test.question['learn']['front'] + '</span>';
-		learnLang += '<input class="answer" autocomplete="off" type="text">';
-		learnLang += '<span class="part2">' + test.question['learn']['back'] + '</span>';
+			learnLang += '<span class="part1">' + test.question['learn']['front'] + '</span>';
+			learnLang += '<input class="answer" autocomplete="off" type="text">';
+			learnLang += '<span class="part2">' + test.question['learn']['back'] + '</span>';
 
-		// Appending html
-		$('.currentLanguage').html(currentLang);
-		$('.toTranslate').html(learnLang);
+			// Appending html
+			$('.currentLanguage').html(currentLang);
+			$('.toTranslate').html(learnLang);
 
-		// Setting listener
-		$('.answer').bind("cut copy paste",function(e) {
-			e.preventDefault();
-		});
+			// Setting listener
+			$('.answer').bind("cut copy paste",function(e) {
+				e.preventDefault();
+			});
+		}
+		
 
 		// Fading in.
 		/*TweenMax.to($('.currentLanguage'), 0.5, {autoAlpha:1, delay: 0.5});
 		TweenMax.to($('.toTranslate'), 0.5, {autoAlpha:1, delay: 0.5});*/
 
-		console.log(test.question);
 	}
 
 	this.checkAnswer = function() {
@@ -110,7 +115,7 @@ var test = new function(){
 				'good': this.score['good'],
 				'false': this.score['false']
 			},
-			url: '/twentywords/courses/save',
+			url: '/courses/save',
 		}).done(function(data){
 			test.nextQuestion();
 		});
@@ -120,7 +125,7 @@ var test = new function(){
 
 		$.ajax({
 			type: 'get',
-			url: '/twentywords/courses/nextQuestion',
+			url: '/courses/nextQuestion',
 			dataType: "json",
 		}).done(function(data){
 			test.score['good'] = 0;
@@ -128,7 +133,6 @@ var test = new function(){
 
 			test.question = data;
 			test.show();
-			;
 		});
 	}
 

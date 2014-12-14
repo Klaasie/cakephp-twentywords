@@ -22,5 +22,10 @@
 			</li>
 
 		</ul>
+
+		<div class="test_finished" style="display: none;">
+			<p><?php echo __('Je bent klaar voor vandaag.'); ?></p>
+			<p><?php echo __('Kom morgen terug!'); ?></p>
+		</div>
 	</div>
 </div>
