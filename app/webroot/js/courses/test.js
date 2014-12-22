@@ -60,6 +60,8 @@ var test = new function(){
 		var givenAnswer = $('.answer').val().toLowerCase();
 		var correctAnswer = this.question['learn']['word'].toLowerCase();
 
+		var correctAnswer = $("<div/>").html(correctAnswer).text();
+
 		if(givenAnswer == correctAnswer){
 			// Answer is correct
 			console.log('Correct!');
@@ -88,9 +90,12 @@ var test = new function(){
 	};
 
 	this.showAnswer = function() {
+		// Decoding
+		var correctAnswer = $("<div/>").html(this.question['learn']['word']).text();
+
 		// Show correct answer
 		$('.answer').addClass('showAnswer');
-		$('.answer').val(this.question['learn']['word']);
+		$('.answer').val(correctAnswer);
 		$('.answer').attr('disabled', true);
 	};
 
