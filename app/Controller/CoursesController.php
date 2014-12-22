@@ -22,7 +22,7 @@ class CoursesController extends AppController {
  *
  * @var array
  */
-	public $uses = array('User','Language', 'Course', 'Input', 'Statistic', 'CategoriesNed', 'CategoriesSpa', 'SentencesNed', 'SentencesSpa');
+	public $uses = array('User','Language', 'Course', 'Input', 'Statistic', 'CategoriesNed', 'CategoriesSpa', 'SentencesNed', 'SentencesSpa', 'Status');
 
 
 	public $components = array('RequestHandler');
@@ -74,49 +74,73 @@ class CoursesController extends AppController {
 	public function start(){
 		$this->autoRender = false;
 
-		// vars
-		$user = $this->User->findById($this->Session->read('User.id'));
-		$langCur = 'Sentences'.ucfirst($user['User']['language']);
-		$langLearn = 'Sentences'.ucfirst($user['User']['learn']);
+		// Vars
+		$data = array();
+		$result = array();
 
-		// First scheck if he is already finished for today.
-		$inputToday = $this->Input->find('count',
-			array(' conditions' => 
-				array(
-					'user_id' => $user['User']['id'],
-					'created' => date('Y-m-d')
-				),
-			)
-		);
+		// First check if he is already finished for today.
+		$status = $this->getStatus();
 
-		if($inputToday >= 7){
-			return json_encode(array("result" => "completed"));
-		} else {
-			$currentInput = $this->Input->find('first', 
+		// Date of status
+		$statusDate = new DateTime($status['Status']['modified']);
+
+		if($status == NULL) { // if first time.
+			// Create status record.
+			$this->Status->create();
+			$data['user_id'] = $this->Session->read('User.id');
+			$data['sentence_id'] = 1;
+			$data['status'] = "progress";
+			$this->Status->save($data);
+
+			// Get first question
+			return $this->getQuestion(1);
+
+		}else if($status['Status']['status'] == "progress"){ // Still busy with one.
+			// Getting all the input available.
+			$currentInput = $this->Input->find('all',
 				array('conditions' => 
-					array('user_id' => $user['User']['id']),
-					'order' => array('id' => 'DESC')
+					array(
+						'user_id' => $this->Session->read('User.id'),
+						'modified >' => $status['Status']['created']
+					),
+					'order' => array('id' =>'ASC'),
 				)
 			);
 
-			if(isset($currentInput['Input'])){
-				// Resuming
-				$id = $currentInput['Input']['sentence_id'] + 1;
+			$lastRecord = end($currentInput);
+			$id = $lastRecord['Input']['sentence_id'] + 1;
 
-				$questionsLang = $this->$langCur->find('first', array('conditions' => array('id' => $id)));
-				$questionsLearn = $this->$langLearn->find('first', array('conditions' => array('id' => $id)));
-
+			if(count($currentInput) < 7){
+				// Still in first bit "today".
+				return $this->getQuestion($id);
+			}else if(count($currentInput) < 14){
+				// In the second bit "yesterday".
+				return $this->getQuestion($id);
 			}else{
-				// First time
-				$questionsLang = $this->$langCur->find('first', array('conditions' => array('id' => 1)));
-				$questionsLearn = $this->$langLearn->find('first', array('conditions' => array('id' => 1)));
+				// In last bit "days before yesterday".
+
+				/**
+				 * @todo Last six logic here.
+				 */
 			}
+		}else if($status['Status']['status'] == "completed" && $statusDate->format('Y-m-d') != date('Y-m-d')){ // Finshed a day before.
+			// Starting a new daily course.
+			$this->Status->create();
+			$data['user_id'] = $this->Session->read('User.id');
+			$data['sentence_id'] = $id;
+			$data['status'] = "progress";
+			$this->Status->save($data);
 
-			$questions['current'] = $questionsLang[$langCur];
-			$questions['learn'] = $questionsLearn[$langLearn];
-
-			return json_encode($questions);
+			return $this->getQuestion($id);
+		}else if($status['Status']['status'] == "completed" && $statusDate->format('Y-m-d') == date('Y-m-d')){ // Finished for today.
+			$result['result'] = 'completed';
+			return json_encode($result);
+		}else{
+			$result['result'] = 'error';
+			$result['message'] = 'Something went wrong during start()';
+			return json_encode($result);
 		}
+
 	}
 
 	public function save(){
@@ -157,70 +181,89 @@ class CoursesController extends AppController {
 	public function nextQuestion(){
 		$this->autoRender = false;
 
-		// vars
-		$user = $this->User->findById($this->Session->read('User.id'));
-		$langCur = 'Sentences'.ucfirst($user['User']['language']);
-		$langLearn = 'Sentences'.ucfirst($user['User']['learn']);
+		// Vars
+		$result = array();
 
-		// First scheck if he is already finished for today.
-		$inputToday = $this->Input->find('count',
-			array(' conditions' => 
+		$status = $this->getStatus();
+
+		$lastInput = $this->Input->find('all',
+			array('conditions' => 
 				array(
-					'user_id' => $user['User']['id'],
-					'created' => date('Y-m-d')
+					'user_id' => $this->Session->read('User.id'),
+					'modified >' => $status['Status']['created']
 				),
+				'order' => array('id' =>'ASC'),
 			)
 		);
 
-		if($inputToday >= 7){
-			return "completed";
-		} else {
-			$currentInput = $this->Input->find('first', 
+		$lastRecord = end($lastInput);
+		$id = $lastRecord['Input']['sentence_id'] + 1;
+
+		// couple of exceptions.
+		if($lastRecord['Input']['sentence_id'] == 7 && count($lastInput) == 7){ // This is the very first time.
+			// Update input row
+			$this->Status->id = $status['Status']['id'];
+			$this->Status->save(array('status' => 'completed'));
+
+			$result['result'] = 'completed';
+			return json_encode($result);
+		} else if($lastRecord['Input']['sentence_id'] == 7 && count($lastInput) == 14){
+			// Update input row
+			$this->Status->id = $status['Status']['id'];
+			$this->Status->save(array('status' => 'completed'));
+
+			$result['result'] = 'completed';
+			return json_encode($result);
+		}
+
+		if(count($lastInput) < 7){
+			// Still in first bit "today".
+			return $this->getQuestion($id);
+		}else if(count($lastInput) < 14){
+			// In the second bit "yesterday".
+			return $this->getQuestion($id);
+		}else if(count($lastInput) < 20){
+			// In last bit "days before yesterday".
+
+			/**
+			 * @todo Last six logic here.
+			 */
+		}elseif(count($lastInput) == 20){
+			// Update status row
+			$this->Status->id = $status['Status']['id'];
+			$this->Status->save(array('status' => 'completed'));
+
+			$result['result'] = 'completed';
+			return json_encode($result);
+		}else{
+			$result['result'] = 'error';
+			$result['message'] = 'Something went wrong during nextQuestion()';
+			return json_encode($result);
+		}
+
+	}
+
+	private function getStatus(){
+		return $this->Status->find('first', 
 				array('conditions' => 
-					array('user_id' => $user['User']['id']),
+					array('user_id' => $this->Session->read('User.id')),
 					'order' => array('id' => 'DESC')
 				)
 			);
-
-			$id = $currentInput['Input']['sentence_id'] + 1;
-
-			$questionsLang = $this->$langCur->find('first', array('conditions' => array('id' => $id)));
-			$questionsLearn = $this->$langLearn->find('first', array('conditions' => array('id' => $id)));
-
-			$questions['current'] = $questionsLang[$langCur];
-			$questions['learn'] = $questionsLearn[$langLearn];
-
-			return json_encode($questions);
-		}
 	}
 
-	// public function getQuestions(){
-	// 	$this->autoRender = false;
+	private function getQuestion($id){
+		$langCur = 'Sentences'.ucfirst($this->Session->read('User.language'));
+		$langLearn = 'Sentences'.ucfirst($this->Session->read('User.learn'));
 
-	// 	// vars
-	// 	$user = $this->User->findById($this->Session->read('User.id'));
-	// 	$langCur = 'Sentences'.ucfirst($user['User']['language']);
-	// 	$langLearn = 'Sentences'.ucfirst($user['User']['learn']);
+		$questionsLang = $this->$langCur->find('first', array('conditions' => array('id' => $id)));
+		$questionsLearn = $this->$langLearn->find('first', array('conditions' => array('id' => $id)));
 
-	// 	$currentInput = $this->Input->find('first', 
-	// 		array('conditions' => 
-	// 			array('user_id' => $user['User']['id']),
-	// 			'order' => array('id' => 'DESC')
-	// 		)
-	// 	);
+		$questions['current'] = $questionsLang[$langCur];
+		$questions['learn'] = $questionsLearn[$langLearn];
 
-	// 	if(isset($currentInput['Input'])){
-	// 		// Resuming
-	// 	}else{
-	// 		// First time
-	// 		$questionsLang = $this->$langCur->find('all', array('conditions' => array('id BETWEEN ? AND ?' => array(1,7))));
-	// 		$questionsLearn = $this->$langLearn->find('all', array('conditions' => array('id BETWEEN ? AND ?' => array(1,7))));
-	// 	}
+		return json_encode($questions);
+	}
 
-	// 	$questions[$langCur] = $questionsLang;
-	// 	$questions[$langLearn] = $questionsLearn;
-
-	// 	return json_encode($questions);
-	// }
 }
 ?>
