@@ -115,6 +115,21 @@ class CoursesController extends AppController {
 				return $this->getQuestion($id);
 			}else if(count($currentInput) < 14){
 				// In the second bit "yesterday".
+
+				// Logic here to get the 7 previous ones.
+				$yesterdaysInput = $this->Input->find('first',
+					array('conditions' => 
+						array(
+							'id <' => $status['Status']['sentence_id'],
+							'user_id' => $this->Session->read('User.id'),
+							'shown' => 1,
+						),
+						'order' => array('id' =>'ASC'),
+					)
+				);
+
+				$id = $yesterdaysInput['Input']['sentence_id'];
+
 				return $this->getQuestion($id);
 			}else{
 				// In last bit "days before yesterday".
@@ -124,6 +139,20 @@ class CoursesController extends AppController {
 				 */
 			}
 		}else if($status['Status']['status'] == "completed" && $statusDate->format('Y-m-d') != date('Y-m-d')){ // Finshed a day before.
+			// Getting all the input available.
+			$currentInput = $this->Input->find('all',
+				array('conditions' => 
+					array(
+						'user_id' => $this->Session->read('User.id'),
+						'modified >' => $status['Status']['created']
+					),
+					'order' => array('id' =>'ASC'),
+				)
+			);
+
+			$lastRecord = end($currentInput);
+			$id = $lastRecord['Input']['sentence_id'] + 1;
+
 			// Starting a new daily course.
 			$this->Status->create();
 			$data['user_id'] = $this->Session->read('User.id');
@@ -159,15 +188,17 @@ class CoursesController extends AppController {
 			// Input already exists
 			$this->Input->id = $inputExists['Input']['id'];
 			// Update data
+			$data['Input']['shown'] = $inputExists['Input']['shown'] + 1;
 			$data['Input']['good'] += $inputExists['Input']['good'];
 			$data['Input']['false'] += $inputExists['Input']['false'];
-			if($inputExists['Input']['successfull'] == NULL && $data['Input']['good'] >= 1){
-				$data['Input']['successfull'] = date();
+			if($inputExists['Input']['good'] == 0 && $data['Input']['good'] == 1){
+				$data['Input']['successfull'] = date('Y-m-d H:i:s');
 			}
 
 			$this->Input->save($data);
 		} else {
 			// This one has not been answered before.
+			$data['Input']['shown'] = 1;
 			if($data['Input']['good'] >= 1){
 				$data['Input']['successfull'] = date('Y-m-d H:i:s');
 			}
@@ -207,7 +238,7 @@ class CoursesController extends AppController {
 
 			$result['result'] = 'completed';
 			return json_encode($result);
-		} else if($lastRecord['Input']['sentence_id'] == 7 && count($lastInput) == 14){
+		} else if($lastRecord['Input']['sentence_id'] == 14 && count($lastInput) == 14){
 			// Update input row
 			$this->Status->id = $status['Status']['id'];
 			$this->Status->save(array('status' => 'completed'));
@@ -218,10 +249,28 @@ class CoursesController extends AppController {
 
 		if(count($lastInput) < 7){
 			// Still in first bit "today".
+
 			return $this->getQuestion($id);
+
 		}else if(count($lastInput) < 14){
 			// In the second bit "yesterday".
+
+			// Logic here to get the 7 previous ones.
+			$yesterdaysInput = $this->Input->find('first',
+				array('conditions' => 
+					array(
+						'id <' => $status['Status']['sentence_id'],
+						'user_id' => $this->Session->read('User.id'),
+						'shown' => 1,
+					),
+					'order' => array('id' =>'ASC'),
+				)
+			);
+
+			$id = $yesterdaysInput['Input']['sentence_id'];
+
 			return $this->getQuestion($id);
+
 		}else if(count($lastInput) < 20){
 			// In last bit "days before yesterday".
 
@@ -235,7 +284,9 @@ class CoursesController extends AppController {
 
 			$result['result'] = 'completed';
 			return json_encode($result);
+
 		}else{
+			// Assume for now something went wrong.
 			$result['result'] = 'error';
 			$result['message'] = 'Something went wrong during nextQuestion()';
 			return json_encode($result);
