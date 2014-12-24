@@ -52,6 +52,20 @@ class CoursesController extends AppController {
 		$statistics = $this->Statistic->find('all', array('conditions' => array('user_id' => $this->Session->read('User.id'))));
 		$input = $this->Input->find('all', array('conditions' => array('user_id' => $this->Session->read('User.id'))));
 
+		// If user has not done any courses.
+		if(count($statistics) == 0){
+			// creating statistics
+			$this->Statistic->create();
+			$data['user_id'] = $this->Session->read('User.id');
+			$data['category_id'] = 1;
+			$data['subcategory_id'] = 1;
+			$data['status'] = "process";
+			$this->Statistic->save($data);
+
+			// Get the latest statistics.
+			$statistics = $this->Statistic->find('all', array('conditions' => array('user_id' => $this->Session->read('User.id'))));
+		}
+
 		$this->set('categoryName', $categoryName);
 		$this->set('appLanguage', $appLanguage);
 		$this->set('learnLanguage', $learnLanguage);
@@ -82,7 +96,9 @@ class CoursesController extends AppController {
 		$status = $this->getStatus();
 
 		// Date of status
-		$statusDate = new DateTime($status['Status']['modified']);
+		if($status != NULL){
+			$statusDate = new DateTime($status['Status']['modified']);
+		}
 
 		if($status == NULL) { // if first time.
 			// Create status record.
