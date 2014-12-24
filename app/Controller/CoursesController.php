@@ -95,7 +95,7 @@ class CoursesController extends AppController {
 			// Get first question
 			return $this->getQuestion(1);
 
-		}else if($status['Status']['status'] == "progress"){ // Still busy with one.
+		}else if($status['Status']['status'] == "progress"){
 			// Getting all the input available.
 			$currentInput = $this->Input->find('all',
 				array('conditions' => 
@@ -107,8 +107,12 @@ class CoursesController extends AppController {
 				)
 			);
 
-			$lastRecord = end($currentInput);
-			$id = $lastRecord['Input']['sentence_id'] + 1;
+			if($currentInput != NULL){
+				$lastRecord = end($currentInput);
+				$id = $lastRecord['Input']['sentence_id'] + 1;
+			}else{
+				$id = $status['Status']['sentence_id'];
+			}
 
 			if(count($currentInput) < 7){
 				// Still in first bit "today".
@@ -134,9 +138,25 @@ class CoursesController extends AppController {
 			}else{
 				// In last bit "days before yesterday".
 
-				/**
-				 * @todo Last six logic here.
-				 */
+				$remainingIds = $id = $status['Status']['sentence_id'] - 7;
+				$belowFifty = $this->Input->query('SELECT * FROM inputs WHERE (`good`/(`good`+`false`))*100 < 50 AND `id` < ' . $remainingIds . ' AND `modified` < "' . $status['Status']['created'] . '" ORDER BY `shown` ASC LIMIT 1;');
+
+				if($belowFifty == NULL){
+					$randomSentence = $this->Input->find('first', 
+						array( 
+							'conditions' => array(
+								'id <' => $remainingIds,
+								'modified <' => $status['Status']['created']
+							), 
+							'order' => 'rand()'
+						)
+					);
+
+					return $this->getQuestion($randomSentence['Input']['sentence_id']);
+				}else{
+					return $this->getQuestion($belowFifty[0]['inputs']['sentence_id']);
+				}
+
 			}
 		}else if($status['Status']['status'] == "completed" && $statusDate->format('Y-m-d') != date('Y-m-d')){ // Finshed a day before.
 			// Getting all the input available.
@@ -274,9 +294,25 @@ class CoursesController extends AppController {
 		}else if(count($lastInput) < 20){
 			// In last bit "days before yesterday".
 
-			/**
-			 * @todo Last six logic here.
-			 */
+			$remainingIds = $id = $status['Status']['sentence_id'] - 7;
+			$belowFifty = $this->Input->query('SELECT * FROM inputs WHERE (`good`/(`good`+`false`))*100 < 50 AND `id` < ' . $remainingIds . ' AND `modified` < "' . $status['Status']['created'] . '" ORDER BY `shown` ASC LIMIT 1;');
+
+			if($belowFifty == NULL){
+				$randomSentence = $this->Input->find('first', 
+					array( 
+						'conditions' => array(
+							'id <' => $remainingIds,
+							'modified <' => $status['Status']['created']
+						), 
+						'order' => 'rand()'
+					)
+				);
+
+				return $this->getQuestion($randomSentence['Input']['sentence_id']);
+			}else{
+				return $this->getQuestion($belowFifty[0]['inputs']['sentence_id']);
+			}
+
 		}elseif(count($lastInput) == 20){
 			// Update status row
 			$this->Status->id = $status['Status']['id'];
