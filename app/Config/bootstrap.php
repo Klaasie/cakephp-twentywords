@@ -183,4 +183,4 @@ CakeLog::config('error', array(
 /**
  *	Extra plugins
  */
-CakePlugin::load('DebugKit');
+//CakePlugin::load('DebugKit');
