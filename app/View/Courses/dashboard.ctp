@@ -1,9 +1,22 @@
 <?php
 	$img = $this->Html->image("subcategory_placeholder_unavailable.png", array("class" => "subcat_img subcategory_unavailable"));
 	$color = "#7fc1da";
+	$finishedToday = false;
 ?>
 <div class="row">
 <?php //pr($categories); ?>
+<?php //pr($status); ?>
+
+	<?php if($status != NULL): ?>
+		<?php if($status['Status']['status'] == "progress"): ?>
+			<div class="col-lg-8 col-lg-offset-2 col-md-8 col-md-offset-2 col-sm-8 col-sm-offset-2 col-xs-8 col-xs-offset-2 alert alert-warning" role="alert"><?php echo __('Je heb de test nog niet afgerond. <a href="/test">Klik hier</a> om naar de test te gaan.'); ?></div>
+		<?php endif; ?>
+		<?php if($status['Status']['status'] == "completed"): ?>
+			<?php $finishedToday = true; ?>
+			<div class="col-lg-8 col-lg-offset-2 col-md-8 col-md-offset-2 col-sm-8 col-sm-offset-2 col-xs-8 col-xs-offset-2 alert alert-success" role="alert"><?php echo __('Je bent klaar voor vandaag!'); ?></div>
+		<?php endif; ?>
+	<?php endif; ?>
+
 	<?php foreach($categories as $category): ?>
 		<?php
 		foreach($statistics as $statistic):
@@ -11,7 +24,7 @@
 				if($statistic['Statistic']['status'] == "success"):
 					$class =  "success";
 				elseif($statistic['Statistic']['status'] == "process"):
-					$class = "process;";
+					$class = "process";
 				endif;
 			else:
 				$class = "locked";
@@ -44,7 +57,7 @@
 					endif;
 				endforeach;
 				?>
-				<?php if($process): ?>
+				<?php if($process && !$finishedToday): ?>
 					<a href="<?php echo $this->Html->url('/test/'); ?>">
 				<?php endif; ?>
 					<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 block">

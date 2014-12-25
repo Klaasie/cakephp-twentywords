@@ -14,13 +14,26 @@
 				<div class="toTranslate">
 
 				</div>
-				<span class="alert alert-danger wrongAnswer"><?php echo __('Helaas! Verkeerde antwoord.'); ?></span>
+				<div class="btn-toolbar entities" role="toolbar">
+					<div class="btn-group" role="group" aria-label="First group">
+						<?php foreach($entities as $entity): ?>
+							<button type="button" class="btn btn-default" data-value="<?php echo $entity['Entities']['entity']; ?>"><?php echo $entity['Entities']['entity']; ?></button>
+						<?php endforeach; ?>
+					</div>
+				</div>
+				<!--<span class="alert alert-danger wrongAnswer"><?php //echo __('Helaas! Verkeerde antwoord.'); ?></span>-->
 			</li>
 
 			<li>
 				<button class="checkAnswer"><?php echo __('Controleer'); ?></button>
+				<button class="moveOn"><?php echo __('Volgende vraag'); ?></button>
 			</li>
 
 		</ul>
+
+		<div class="test_finished" style="display: none;">
+			<p><?php echo __('Je bent klaar voor vandaag.'); ?></p>
+			<p><?php echo __('Kom morgen terug!'); ?></p>
+		</div>
 	</div>
 </div>

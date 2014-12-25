@@ -104,7 +104,7 @@
 				<h2 class="title"><?php echo __('Ranglijst'); ?></h2>
 				<div class="content">
 					<div class="item">
-						<?php echo __('Nog niets :('); ?><br />
+						<?php echo __('In ontwikkeling'); ?><br />
 						<p>&nbsp;</p>
 						<p>&nbsp;</p>
 						<p>&nbsp;</p>
@@ -118,7 +118,7 @@
 				<h2 class="title"><?php echo __('Verworven'); ?></h2>
 				<div class="content">
 					<div class="item">
-						<?php echo __('Nog niets :('); // Eventually dynamic ?>
+						<?php echo __('In ontwikkeling'); // Eventually dynamic ?>
 					</div>
 				</div>
 			</div> <!-- .achievements -->
