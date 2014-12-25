@@ -26,6 +26,7 @@
 
 			<li>
 				<button class="checkAnswer"><?php echo __('Controleer'); ?></button>
+				<button class="moveOn"><?php echo __('Volgende vraag'); ?></button>
 			</li>
 
 		</ul>

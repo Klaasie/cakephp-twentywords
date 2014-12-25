@@ -21,7 +21,8 @@ var test = new function(){
 
 		if(test.question['result'] == "completed"){
 			$('ul.test').hide();
-			$('.test_finished').show();
+			//$('.test_finished').show();
+			window.location.replace("/dashboard");
 		} else{
 			// Setting id for score component
 			this.score['id'] = this.question['learn']['id'];
@@ -64,18 +65,25 @@ var test = new function(){
 
 		if(givenAnswer == correctAnswer){
 			// Answer is correct
-			console.log('Correct!');
 			this.score['good'] = 1;
-			this.save();
+
+			$('.checkAnswer').hide();
+			$('.answer').addClass('correctAnswer');
+
+			$('.moveOn').addClass('correct');
+			$('.moveOn').css('display', 'block');;
+			//this.save();
 		} else if(this.score['false'] == 1){
-			// Move to next question anyway.
-			console.log('Lets just move on!');
-
 			this.score['false'] += 1;
+			this.showAnswer();
 
-			this.save();
+			$('.checkAnswer').hide();
+
+			$('.moveOn').addClass('wrong');
+			$('.moveOn').css('display', 'block');;
+			//this.save();
 		} else {
-			console.log('Incorrect!');
+
 			this.showAnswer();
 
 			this.score['false'] += 1;
@@ -136,6 +144,11 @@ var test = new function(){
 			test.score['good'] = 0;
 			test.score['false'] = 0;
 
+			$('.moveOn').removeClass('wrong');
+			$('.moveOn').removeClass('correct');
+			$('.moveOn').hide();
+			$('.checkAnswer').css('display', 'block');;
+
 			test.question = jQuery.parseJSON($.base64.decode(data));
 			test.show();
 		});
@@ -152,10 +165,15 @@ $(document).ready(function(){
 		test.checkAnswer();
 	});
 
+	$('.moveOn').click(function(){
+		test.save();
+	});
+
 	$('.entities button').click(function(ev){
 		var target = ev.currentTarget;
 
 		$('.answer').val($('.answer').val() + $(target).data('value'));
+		$('.answer').focus();
 	});
 
 });
