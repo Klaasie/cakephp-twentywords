@@ -205,10 +205,10 @@ class UsersController extends AppController {
 				$Email = new CakeEmail();
 				$Email->emailFormat('html');
 				$Email->template('welcome', 'twentywords');
-				$Email->viewVars(array('title' => 'Welcome to Twenty Words!','user' => $this->request->data);
+				$Email->viewVars(array('title' => 'Welkom bij Twenty Words!','user' => $this->request->data));
 				$Email->from(array('noreply@twentywords.nl' => 'Twenty Words'));
-				$Email->to($this->request->data['User']['username']);
-				$Email->subject(__('Welcome to Twenty Words!'));
+				$Email->to($this->request->data['User']['email']);
+				$Email->subject(__('Welkom bij Twenty Words!'));
 				$Email->send();
 
 				$this->Session->setFlash(
