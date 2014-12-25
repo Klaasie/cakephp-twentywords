@@ -87,7 +87,6 @@ var test = new function(){
 			this.showAnswer();
 
 			this.score['false'] += 1;
-//			console.log(this.score);
 
 			// Hide correct answer
 			setTimeout(function(){
