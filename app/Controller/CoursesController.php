@@ -22,7 +22,7 @@ class CoursesController extends AppController {
  *
  * @var array
  */
-	public $uses = array('User','Language', 'Course', 'Input', 'Statistic', 'CategoriesNed', 'CategoriesSpa', 'SentencesNed', 'SentencesSpa', 'Status');
+	public $uses = array('User','Language', 'Course', 'Input', 'Statistic', 'CategoriesNed', 'CategoriesSpa', 'SentencesNed', 'SentencesSpa', 'Status', 'Entities');
 
 
 	public $components = array('RequestHandler');
@@ -76,12 +76,16 @@ class CoursesController extends AppController {
 	}
 
 	public function test(){
+		// Get languages
 		$curLang = $this->Session->read('User.language');
 		$learnLang = $this->Session->read('User.learn');
 
+		// Set html entities
+		$entities = $this->Entities->find('all', array('conditions' => array('languages_shortcode' => $learnLang)));
 
 		$this->set('curLang', $curLang);
 		$this->set('learnLang', $learnLang);
+		$this->set('entities', $entities);
 		$this->set('jsIncludes', array('courses/test'));
 	}
 

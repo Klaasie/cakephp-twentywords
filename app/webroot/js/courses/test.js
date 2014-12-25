@@ -152,4 +152,10 @@ $(document).ready(function(){
 		test.checkAnswer();
 	});
 
+	$('.entities button').click(function(ev){
+		var target = ev.currentTarget;
+
+		$('.answer').val($('.answer').val() + $(target).data('value'));
+	});
+
 });

@@ -409,7 +409,7 @@ ul.test li .currentLanguage {
 }
 
 ul.test li .toTranslate {
-
+	height: 39px;
 }
 
 ul.test li span {
@@ -483,6 +483,11 @@ ul.test li button.checkAnswer {
 
 ul.test li button.checkAnswer:hover {
 	background-color: rgba(127,193,218,1);
+}
+
+.entities {
+	float: left;
+	margin: 0 25%;
 }
 
 /**

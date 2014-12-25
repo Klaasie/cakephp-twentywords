@@ -14,7 +14,14 @@
 				<div class="toTranslate">
 
 				</div>
-				<span class="alert alert-danger wrongAnswer"><?php echo __('Helaas! Verkeerde antwoord.'); ?></span>
+				<div class="btn-toolbar entities" role="toolbar">
+					<div class="btn-group" role="group" aria-label="First group">
+						<?php foreach($entities as $entity): ?>
+							<button type="button" class="btn btn-default" data-value="<?php echo $entity['Entities']['entity']; ?>"><?php echo $entity['Entities']['entity']; ?></button>
+						<?php endforeach; ?>
+					</div>
+				</div>
+				<!--<span class="alert alert-danger wrongAnswer"><?php //echo __('Helaas! Verkeerde antwoord.'); ?></span>-->
 			</li>
 
 			<li>
@@ -28,4 +35,10 @@
 			<p><?php echo __('Kom morgen terug!'); ?></p>
 		</div>
 	</div>
+</div>
+
+<div class="btn-toolbar" role="toolbar" aria-label="...">
+  <div class="btn-group" role="group" aria-label="...">...</div>
+  <div class="btn-group" role="group" aria-label="...">...</div>
+  <div class="btn-group" role="group" aria-label="...">...</div>
 </div>
