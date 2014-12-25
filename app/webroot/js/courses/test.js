@@ -8,9 +8,9 @@ var test = new function(){
 		$.ajax({
 			type: 'get',
 			url: '/courses/start',
-			dataType: "json",
+			//dataType: "json",
 		}).done(function(data){
-			test.question = data;
+			test.question = jQuery.parseJSON($.base64.decode(data));
 			test.show();
 		});
 	}
@@ -131,12 +131,12 @@ var test = new function(){
 		$.ajax({
 			type: 'get',
 			url: '/courses/nextQuestion',
-			dataType: "json",
+			//dataType: "json",
 		}).done(function(data){
 			test.score['good'] = 0;
 			test.score['false'] = 0;
 
-			test.question = data;
+			test.question = jQuery.parseJSON($.base64.decode(data));
 			test.show();
 		});
 	}

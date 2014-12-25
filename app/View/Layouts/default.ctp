@@ -55,6 +55,7 @@ $cakeDescription = __d('cake_dev', 'Twenty Words');
 		echo $this->Html->script('jquery');
 		echo $this->Html->script('bootstrap.min');
 		echo $this->Html->script('TweenMax.min');
+		echo $this->html->script('base64/jquery.base64.min');
 
 		echo $this->fetch('meta');
 		echo $this->fetch('css');

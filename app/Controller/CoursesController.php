@@ -369,7 +369,7 @@ class CoursesController extends AppController {
 		$questions['current'] = $questionsLang[$langCur];
 		$questions['learn'] = $questionsLearn[$langLearn];
 
-		return json_encode($questions);
+		return base64_encode(json_encode($questions));
 	}
 
 }
