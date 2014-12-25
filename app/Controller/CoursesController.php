@@ -66,12 +66,20 @@ class CoursesController extends AppController {
 			$statistics = $this->Statistic->find('all', array('conditions' => array('user_id' => $this->Session->read('User.id'))));
 		}
 
+		$status = $this->getStatus();
+
+		// Date of status
+		if($status != NULL){
+			$statusDate = new DateTime($status['Status']['modified']);
+		}
+
 		$this->set('categoryName', $categoryName);
 		$this->set('appLanguage', $appLanguage);
 		$this->set('learnLanguage', $learnLanguage);
 		$this->set('categories', $categories);
 
 		$this->set('statistics', $statistics);
+		$this->set('status', $status);
 		$this->set('input', $input);
 	}
 
@@ -203,11 +211,11 @@ class CoursesController extends AppController {
 			return $this->getQuestion($id);
 		}else if($status['Status']['status'] == "completed" && $statusDate->format('Y-m-d') == date('Y-m-d')){ // Finished for today.
 			$result['result'] = 'completed';
-			return json_encode($result);
+			return base64_encode(json_encode($result));
 		}else{
 			$result['result'] = 'error';
 			$result['message'] = 'Something went wrong during start()';
-			return json_encode($result);
+			return base64_encode(json_encode($result));
 		}
 
 	}
@@ -277,14 +285,14 @@ class CoursesController extends AppController {
 			$this->Status->save(array('status' => 'completed'));
 
 			$result['result'] = 'completed';
-			return json_encode($result);
+			return base64_encode(json_encode($result));
 		} else if($lastRecord['Input']['sentence_id'] == 14 && count($lastInput) == 14){
 			// Update input row
 			$this->Status->id = $status['Status']['id'];
 			$this->Status->save(array('status' => 'completed'));
 
 			$result['result'] = 'completed';
-			return json_encode($result);
+			return base64_encode(json_encode($result));
 		}
 
 		if(count($lastInput) < 7){
@@ -339,13 +347,13 @@ class CoursesController extends AppController {
 			$this->Status->save(array('status' => 'completed'));
 
 			$result['result'] = 'completed';
-			return json_encode($result);
+			return base64_encode(json_encode($result));
 
 		}else{
 			// Assume for now something went wrong.
 			$result['result'] = 'error';
 			$result['message'] = 'Something went wrong during nextQuestion()';
-			return json_encode($result);
+			return base64_encode(json_encode($result));
 		}
 
 	}
