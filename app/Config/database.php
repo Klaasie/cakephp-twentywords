@@ -1,3 +1,4 @@
+
 <?php
 /**
  * This is core configuration file.
@@ -59,7 +60,7 @@
  */
 class DATABASE_CONFIG {
 
-	public $test = array(
+	public $default = array(
 		'datasource' => 'Database/Mysql',
 		'persistent' => false,
 		'host' => 'localhost',
@@ -70,7 +71,7 @@ class DATABASE_CONFIG {
 		//'encoding' => 'utf8',
 	);
 
-	public $default = array(
+	public $test = array(
 		'datasource' => 'Database/Mysql',
 		'persistent' => false,
 		'host' => 'localhost',
