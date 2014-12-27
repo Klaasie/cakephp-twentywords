@@ -71,6 +71,10 @@ class CoursesController extends AppController {
 		// Date of status
 		if($status != NULL){
 			$statusDate = new DateTime($status['Status']['modified']);
+
+			if($statusDate->format('Y-m-d') != date('Y-m-d')){
+				$status = NULL;
+			}
 		}
 
 		$this->set('categoryName', $categoryName);

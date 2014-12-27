@@ -4,6 +4,7 @@
 	$finishedToday = false;
 ?>
 <div class="row">
+<?php // Debugging ?>
 <?php //pr($categories); ?>
 <?php //pr($status); ?>
 
